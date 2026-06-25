@@ -11,6 +11,10 @@ class PointService:
             p.sequence = i
 
     def add_point(self, point):
+        # alapértelmezett visited flag, ha nincs
+        if not hasattr(point, "visited"):
+            point.visited = False
+
         self.points.append(point)
         self.normalize_sequences()
         print("NEW POINT", point.latitude, point.longitude, point.sequence)
@@ -33,6 +37,9 @@ class PointService:
                 old.sequence = p.sequence
                 old.in_database = True
             else:
+                # biztosítsuk, hogy legyen visited attribútum
+                if not hasattr(p, "visited"):
+                    p.visited = False
                 self.points.append(p)
 
         self.normalize_sequences()
@@ -53,3 +60,14 @@ class PointService:
 
         self.points = new_list
         self.normalize_sequences()
+
+    def get_next_unvisited_point(self):
+        """
+        Visszaadja a következő meglátogatandó pontot (visited == False),
+        a sequence sorrend alapján.
+        """
+        self.normalize_sequences()
+        for p in self.points:
+            if not getattr(p, "visited", False):
+                return p
+        return None

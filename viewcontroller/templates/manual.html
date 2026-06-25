@@ -1,160 +1,178 @@
 {% extends "base.html" %}
 
-
 {% block content %}
-
 
 <h1>Manual handling</h1>
 
-
 <div class="remote">
-
-
-    <button 
+    <button
         class="up"
         onclick="send('forward')">
         Forward
     </button>
 
-
-
     <div class="middle">
-
-
         <button onclick="send('left')">
             Left
         </button>
 
-
-        <button 
+        <button
             class="stop"
             onclick="send('stop')">
             Stop
         </button>
 
-
         <button onclick="send('right')">
             Right
         </button>
-
-
     </div>
-
-
 
     <button
         class="down"
         onclick="send('backward')">
         Backward
     </button>
-
-
 </div>
 
+<hr>
 
+<h2>Navigation control</h2>
+
+<div class="nav-control">
+    <button onclick="startNav()">
+        Start navigation
+    </button>
+
+    <button onclick="stopNav()">
+        Stop navigation
+    </button>
+</div>
+
+<div class="nav-status-panel">
+    <p><strong>Status:</strong> <span id="nav-status">Idle</span></p>
+    <p><strong>Target point:</strong> <span id="nav-target">–</span></p>
+    <p><strong>Distance to target:</strong> <span id="nav-distance">–</span></p>
+    <p><strong>Current position:</strong> <span id="gps-position">–</span></p>
+</div>
 
 <style>
-
-
 .remote {
-
-    width:300px;
-
-    margin:auto;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
+    width: 300px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-
-
 
 .remote button {
-
-
-    width:90px;
-
-    height:70px;
-
-    margin:8px;
-
-    font-size:16px;
-
+    width: 90px;
+    height: 70px;
+    margin: 8px;
+    font-size: 16px;
 }
-
-
 
 .middle {
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
-
 
 .stop {
-
-    background:#aa0000;
-
-    color:white;
-
+    background: #aa0000;
+    color: white;
 }
-
-
 
 .up,
 .down {
-
-    margin-left:auto;
-    margin-right:auto;
-
+    margin-left: auto;
+    margin-right: auto;
 }
 
+.nav-control {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
 
+.nav-control button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.nav-status-panel {
+    margin-top: 20px;
+    max-width: 400px;
+}
 </style>
 
-
-
-
 <script>
-
-
-function send(cmd)
-{
-
-    fetch(
-        "/command",
-        {
-
-            method:"POST",
-
-            headers:
-            {
-                "Content-Type":"application/json"
-            },
-
-
-            body:
-            JSON.stringify(
-            {
-                command:cmd
-            })
-
-        }
-    );
-
+function send(cmd) {
+    // bármely manuális gomb megnyomásakor az önjárásnak le kell állnia
+    fetch("/command", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            command: cmd
+        })
+    });
 }
 
+function startNav() {
+    fetch("/nav/start", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+}
 
+function stopNav() {
+    fetch("/nav/stop", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+}
+
+function updateNavStatus() {
+    fetch("/nav/status")
+        .then(resp => resp.json())
+        .then(data => {
+            document.getElementById("nav-status").textContent = data.state || "Unknown";
+
+            if (data.target) {
+                const t = data.target;
+                document.getElementById("nav-target").textContent =
+                    `seq=${t.sequence}, lat=${t.latitude.toFixed(6)}, lon=${t.longitude.toFixed(6)}`;
+            } else {
+                document.getElementById("nav-target").textContent = "–";
+            }
+
+            if (data.distance != null) {
+                document.getElementById("nav-distance").textContent =
+                    `${data.distance.toFixed(2)} m`;
+            } else {
+                document.getElementById("nav-distance").textContent = "–";
+            }
+
+            if (data.current_position) {
+                const c = data.current_position;
+                document.getElementById("gps-position").textContent =
+                    `lat=${c.latitude.toFixed(6)}, lon=${c.longitude.toFixed(6)}`;
+            } else {
+                document.getElementById("gps-position").textContent = "–";
+            }
+        })
+        .catch(err => {
+            console.log("nav status error", err);
+        });
+}
+
+// periódikus frissítés
+setInterval(updateNavStatus, 1000);
 </script>
-
-
 
 {% endblock %}

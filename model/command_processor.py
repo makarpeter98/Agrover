@@ -16,7 +16,7 @@ class CommandProcessor:
         while True:
             try:
                 cmd = self.command_queue.get(timeout=0.1)
-
+                print("CommandProcessor: ",cmd)
                 if cmd == "forward":
                     self.drive.forward()
                 elif cmd == "backward":

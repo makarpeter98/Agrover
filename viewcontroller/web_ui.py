@@ -1,6 +1,7 @@
 # viewcontroller/web_ui.py
 
 from flask import Flask, render_template, jsonify, request
+import logging
 
 
 class WebUI:
@@ -12,7 +13,9 @@ class WebUI:
         get_points,
         save_points,
         load_points,
-        clear_points
+        clear_points,
+        navigation,
+        enable_flask_logs=False
     ):
         self.command_queue = command_queue
         self.gps_handler = gps_handler
@@ -24,9 +27,13 @@ class WebUI:
         self.load_points = load_points
         self.clear_points = clear_points
 
+        self.navigation = navigation
+
         self.app = Flask(__name__)
 
         self.register_routes()
+        
+        self.enable_flask_logs = enable_flask_logs
 
     def register_routes(self):
         @self.app.route("/")
@@ -47,6 +54,11 @@ class WebUI:
         )
         def command():
             cmd = request.json["command"]
+
+            # manuális beavatkozás → azonnal álljon le az önjárás
+            if self.navigation is not None:
+                self.navigation.stop_navigation()
+
             self.command_queue.put(cmd)
 
             return jsonify({"ok": True})
@@ -107,7 +119,6 @@ class WebUI:
         def db_save():
             data = request.json or {}
 
-            # támogatjuk: ids és indexes kulcsot is
             ids = data.get("ids")
             if ids is None:
                 ids = data.get("indexes", [])
@@ -151,10 +162,54 @@ class WebUI:
 
             return jsonify({"ok": True})
 
+        # --- navigation endpoints ---
+
+        @self.app.route(
+            "/nav/start",
+            methods=["POST"]
+        )
+        def nav_start():
+            if self.navigation is not None:
+                self.navigation.start_navigation()
+            return jsonify({"ok": True})
+
+        @self.app.route(
+            "/nav/stop",
+            methods=["POST"]
+        )
+        def nav_stop():
+            if self.navigation is not None:
+                self.navigation.stop_navigation()
+            return jsonify({"ok": True})
+
+        @self.app.route("/nav/status")
+        def nav_status():
+            if self.navigation is None:
+                return jsonify(
+                    {
+                        "state": "disabled",
+                        "target": None,
+                        "distance": None,
+                        "current_position": None
+                    }
+                )
+
+            status = self.navigation.get_status()
+            return jsonify(status)
+
     def run(self):
+        import logging
+        log = logging.getLogger('werkzeug')
+
+        if not self.enable_flask_logs:
+            log.setLevel(logging.ERROR)
+        else:
+            log.setLevel(logging.INFO)
+
         self.app.run(
             host="0.0.0.0",
             port=5000,
             debug=False,
             use_reloader=False
         )
+
