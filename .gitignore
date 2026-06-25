@@ -1,0 +1,40 @@
+# --- Python általános ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Virtuális környezetek ---
+venv/
+env/
+.venv/
+bin/
+lib/
+lib64/
+include/
+pyvenv.cfg
+
+# --- Adatbázisok ---
+*.db
+
+# --- Logok, temp fájlok ---
+*.log
+*.tmp
+*.bak
+
+# --- Editor / IDE fájlok ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Flask / cache ---
+instance/
+*.pid
+
+# --- OS fájlok ---
+.DS_Store
+Thumbs.db
+
+# --- Saját projekt-specifikus kizárások ---
+test.py
