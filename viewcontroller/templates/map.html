@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<link
+rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+
+
+<style>
+
+#map {
+
+    height:600px;
+    width:100%;
+
+}
+
+
+</style>
+
+
+
+<h2>Map</h2>
+
+
+<div id="map"></div>
+
+
+
+<script src=
+"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
+
+
+<script>
+
+
+let map =
+L.map("map");
+
+
+
+L.tileLayer(
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+
+        maxZoom:19,
+
+        attribution:
+        "© OpenStreetMap"
+
+    }
+)
+.addTo(map);
+
+
+
+
+let roverMarker = null;
+
+
+let firstFix = true;
+
+
+
+let redIcon =
+L.icon(
+{
+
+    iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
+
+
+    shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+
+
+    iconSize:
+    [25,41],
+
+
+    iconAnchor:
+    [12,41]
+
+});
+
+
+
+
+let blueIcon =
+L.icon(
+{
+
+    iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
+
+
+    shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+
+
+    iconSize:
+    [25,41],
+
+
+    iconAnchor:
+    [12,41]
+
+});
+
+
+
+
+
+
+async function updateGPS()
+{
+
+    let response =
+        await fetch("/gps");
+
+
+    let gps =
+        await response.json();
+
+
+
+    if(
+        gps.latitude == null
+    )
+    {
+
+        return;
+
+    }
+
+
+
+    let pos =
+    [
+        gps.latitude,
+        gps.longitude
+    ];
+
+
+
+    if(roverMarker == null)
+    {
+
+
+        roverMarker =
+        L.marker(
+            pos,
+            {
+                icon:redIcon
+            }
+        )
+        .addTo(map);
+
+
+
+    }
+    else
+    {
+
+        roverMarker
+        .setLatLng(pos);
+
+    }
+
+
+
+
+    if(firstFix)
+    {
+
+        map.setView(
+            pos,
+            18
+        );
+
+
+        firstFix=false;
+
+    }
+
+
+}
+
+
+
+
+async function updatePoints()
+{
+
+
+    let response =
+        await fetch("/points");
+
+
+    let points =
+        await response.json();
+
+
+
+    points.forEach(
+        p =>
+        {
+
+
+            L.marker(
+            [
+                p.latitude,
+                p.longitude
+            ],
+            {
+                icon:blueIcon
+            })
+            .addTo(map);
+
+
+        }
+    );
+
+
+}
+
+
+
+
+
+map.on(
+"click",
+function(e)
+{
+
+
+    fetch(
+        "/map_point",
+        {
+
+            method:"POST",
+
+            headers:
+            {
+                "Content-Type":
+                "application/json"
+            },
+
+
+            body:
+            JSON.stringify(
+            {
+
+                latitude:
+                e.latlng.lat,
+
+
+                longitude:
+                e.latlng.lng
+
+            })
+
+        }
+    );
+
+
+});
+
+
+
+
+updateGPS();
+
+updatePoints();
+
+
+
+setInterval(
+    updateGPS,
+    1000
+);
+
+
+setInterval(
+    updatePoints,
+    2000
+);
+
+
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<h1>Manual handling</h1>
+
+
+<div class="remote">
+
+
+    <button 
+        class="up"
+        onclick="send('forward')">
+        Forward
+    </button>
+
+
+
+    <div class="middle">
+
+
+        <button onclick="send('left')">
+            Left
+        </button>
+
+
+        <button 
+            class="stop"
+            onclick="send('stop')">
+            Stop
+        </button>
+
+
+        <button onclick="send('right')">
+            Right
+        </button>
+
+
+    </div>
+
+
+
+    <button
+        class="down"
+        onclick="send('backward')">
+        Backward
+    </button>
+
+
+</div>
+
+
+
+<style>
+
+
+.remote {
+
+    width:300px;
+
+    margin:auto;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+}
+
+
+
+.remote button {
+
+
+    width:90px;
+
+    height:70px;
+
+    margin:8px;
+
+    font-size:16px;
+
+}
+
+
+
+.middle {
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+
+
+.stop {
+
+    background:#aa0000;
+
+    color:white;
+
+}
+
+
+
+.up,
+.down {
+
+    margin-left:auto;
+    margin-right:auto;
+
+}
+
+
+</style>
+
+
+
+
+<script>
+
+
+function send(cmd)
+{
+
+    fetch(
+        "/command",
+        {
+
+            method:"POST",
+
+            headers:
+            {
+                "Content-Type":"application/json"
+            },
+
+
+            body:
+            JSON.stringify(
+            {
+                command:cmd
+            })
+
+        }
+    );
+
+}
+
+
+</script>
+
+
+
+{% endblock %}

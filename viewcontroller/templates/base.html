@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Rover</title>
+
+<style>
+
+body {
+
+    margin:0;
+    background:#222;
+    color:white;
+    font-family:Arial;
+
+}
+
+
+.menu {
+
+    height:60px;
+    background:#111;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    gap:40px;
+
+}
+
+
+.menu a {
+
+    color:white;
+    text-decoration:none;
+
+}
+
+
+.content {
+
+    padding:40px;
+    text-align:center;
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="menu">
+
+<a href="/">
+Manual handling
+</a>
+
+<a href="/map">
+Map
+</a>
+
+<a href="/database">
+Database
+</a>
+
+</div>
+
+
+{% block content %}
+
+{% endblock %}
+
+
+</body>
+
+</html>

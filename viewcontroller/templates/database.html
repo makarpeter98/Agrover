@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Database</h1>
+
+<div style="margin-bottom:20px;">
+
+    <button onclick="loadDB()">
+        Betöltés DB-ből
+    </button>
+
+    <button onclick="save()">
+        Kijelöltek mentése
+    </button>
+
+    <button onclick="del()">
+        Kijelöltek törlése
+    </button>
+
+    <button onclick="allSelect()">
+        Összes kijelöl
+    </button>
+
+</div>
+
+
+<table border="1" id="table" style="width:100%; text-align:center; cursor:pointer;"></table>
+
+
+<script>
+
+let currentSort = {
+    column: null,
+    asc: true
+};
+
+
+async function refresh() {
+
+    let r = await fetch("/points");
+    let data = await r.json();
+
+    renderTable(data);
+}
+
+
+function renderTable(data) {
+
+    let t = document.getElementById("table");
+
+    t.innerHTML =
+`
+<tr>
+    <th onclick="sortTable('latitude')">LAT</th>
+    <th onclick="sortTable('longitude')">LON</th>
+    <th onclick="sortTable('time')">TIME</th>
+    <th onclick="sortTable('sequence')">SEQ</th>
+    <th onclick="sortTable('in_database')">DB</th>
+    <th onclick="sortTable('visited')">VISITED</th>
+    <th>SELECT</th>
+</tr>
+`;
+
+    data.forEach(p => {
+
+        t.innerHTML +=
+`
+<tr>
+    <td>${p.latitude}</td>
+    <td>${p.longitude}</td>
+    <td>${p.time}</td>
+    <td>${p.sequence}</td>
+    <td>${p.in_database}</td>
+    <td>${p.visited}</td>
+    <td>
+        <input
+            class="point"
+            data-id="${p.uid}"
+            type="checkbox">
+    </td>
+</tr>
+`;
+    });
+
+    window._tableData = data;
+}
+
+
+function sortTable(column) {
+
+    let data = window._tableData;
+
+    if (!data) return;
+
+    if (currentSort.column === column) {
+        currentSort.asc = !currentSort.asc;
+    } else {
+        currentSort.column = column;
+        currentSort.asc = true;
+    }
+
+    data.sort((a, b) => {
+
+        let x = a[column];
+        let y = b[column];
+
+        // szám vagy string összehasonlítás
+        if (!isNaN(x) && !isNaN(y)) {
+            x = Number(x);
+            y = Number(y);
+        }
+
+        if (x < y) return currentSort.asc ? -1 : 1;
+        if (x > y) return currentSort.asc ? 1 : -1;
+        return 0;
+    });
+
+    renderTable(data);
+}
+
+
+function selected() {
+    return [...document.querySelectorAll(".point:checked")]
+        .map(x => x.dataset.id);
+}
+
+
+async function save() {
+
+    await fetch(
+        "/db/save",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                ids:selected()
+            })
+        }
+    );
+
+    refresh();
+}
+
+
+async function del() {
+
+    await fetch(
+        "/points/delete",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                ids:selected()
+            })
+        }
+    );
+
+    refresh();
+}
+
+
+async function loadDB() {
+
+    await fetch("/db/load");
+    refresh();
+}
+
+
+function allSelect() {
+
+    document
+        .querySelectorAll(".point")
+        .forEach(x => x.checked = true);
+}
+
+
+refresh();
+
+</script>
+
+{% endblock %}
