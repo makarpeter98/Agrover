@@ -1,4 +1,4 @@
-# model/map_point.py
+# database/map_point.py
 
 from datetime import datetime
 import uuid

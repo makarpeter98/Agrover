@@ -1,4 +1,4 @@
-# model/gps_service.py
+#hardware/gps/gps_service.py
 
 import threading
 

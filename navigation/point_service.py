@@ -1,4 +1,4 @@
-# model/point_service.py
+# navigation/point_service.py
 
 class PointService:
     def __init__(self, database):

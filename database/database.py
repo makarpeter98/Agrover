@@ -1,8 +1,8 @@
-# model/database.py
+# database/database.py
 
 import sqlite3
 
-from model.map_point import MapPoint
+from database.map_point import MapPoint
 
 
 class Database:

@@ -1,3 +1,5 @@
+# hardware/rover/rover_model.py
+
 from gpiozero import OutputDevice
 from gpiozero import Device
 from gpiozero.pins.lgpio import LGPIOFactory
