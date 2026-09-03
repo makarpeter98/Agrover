@@ -1,28 +1,26 @@
-#navigation/navigation_math.py
+# navigation/navigation_math.py
 
 import math
 
-
 class NavigationMath:
 
+    EARTH_RADIUS_M = 6_371_000
 
-    @staticmethod
-    def distance_m(lat1, lon1, lat2, lon2):
+    def distance_m(self, lat1, lon1, lat2, lon2):
 
-        R = 6371000
+        R = 6_371_000
 
         p1 = math.radians(lat1)
         p2 = math.radians(lat2)
 
-        dp = math.radians(lat2 - lat1)
-        dl = math.radians(lon2 - lon1)
+        d_lat = math.radians(lat2 - lat1)
+        d_lon = math.radians(lon2 - lon1)
 
         a = (
-            math.sin(dp / 2) ** 2
-            +
-            math.cos(p1)
+            math.sin(d_lat / 2) ** 2
+            + math.cos(p1)
             * math.cos(p2)
-            * math.sin(dl / 2) ** 2
+            * math.sin(d_lon / 2) ** 2
         )
 
         return R * 2 * math.atan2(
@@ -30,32 +28,25 @@ class NavigationMath:
             math.sqrt(1 - a)
         )
 
-
-    @staticmethod
-    def bearing(lat1, lon1, lat2, lon2):
+    def bearing(self, lat1, lon1, lat2, lon2):
 
         lat1 = math.radians(lat1)
         lat2 = math.radians(lat2)
 
-        dl = math.radians(lon2 - lon1)
+        d_lon = math.radians(lon2 - lon1)
 
-        x = math.sin(dl) * math.cos(lat2)
+        x = math.sin(d_lon) * math.cos(lat2)
 
         y = (
             math.cos(lat1) * math.sin(lat2)
-            -
-            math.sin(lat1)
+            - math.sin(lat1)
             * math.cos(lat2)
-            * math.cos(dl)
+            * math.cos(d_lon)
         )
 
         return (
-            math.degrees(math.atan2(x, y))
-            + 360
+            math.degrees(math.atan2(x, y)) + 360
         ) % 360
 
-
-    @staticmethod
-    def normalize_angle(angle):
-
-        return (angle + 180) % 360 - 180
+    def heading_difference(self, actual_heading, target_heading):
+        return (target_heading - actual_heading + 180) % 360 - 180

@@ -38,16 +38,29 @@ def map_routes(
         })
 
     @bp.route("/map_point", methods=["POST"])
+    @bp.route("/map_point", methods=["POST"])
     def map_point():
 
+        print("MAP CLICK RECEIVED")
+
         data = request.json
+
+        print("DATA:", data)
 
         point = MapPoint(
             data["latitude"],
             data["longitude"]
         )
 
+        print(
+            "CREATED POINT:",
+            point.latitude,
+            point.longitude
+        )
+
         add_point_callback(point)
+
+        print("POINT ADDED")
 
         return jsonify({"saved": True})
 

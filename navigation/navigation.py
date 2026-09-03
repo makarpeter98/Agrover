@@ -1,7 +1,6 @@
 # navigation/navigation.py
 
 from navigation.navigation_math import NavigationMath
-from navigation.navigation_controller import NavigationController
 
 import threading
 import time
@@ -15,8 +14,6 @@ class Navigation:
         self.drive_command = drive_command
         self.heading = heading
 
-        self.controller = NavigationController()
-
         self._target_point = None
         self._active = False
         self._state = "idle"
@@ -26,7 +23,8 @@ class Navigation:
         self.target_heading = 0
         self.heading_difference = 0
 
-        self.arrival_threshold = 3
+        self.arrival_distance_limit = 1
+        self.heading_tolerance = 5
 
         self._stop_event = threading.Event()
 
@@ -61,62 +59,92 @@ class Navigation:
         self._set_command("STOP")
         self._state = "idle"
 
-
     def _run_loop(self):
-
+                
         print("Navigation started")
-
-        while self._active:
-
-            pos = self.gps_handler.get_current_position()
-
-            if not pos:
+        
+        nav_math = NavigationMath()
+        
+        while True:
+            
+            if self._active == False:
+                state = "idle"
                 self._set_command("STOP")
-                time.sleep(1)
-                continue
-
-
-            self._distance_to_target = NavigationMath.distance_m(
-                pos.latitude,
-                pos.longitude,
-                self._target_point.latitude,
-                self._target_point.longitude
+                break
+            
+            ##Atnezve, mukodik
+            state = self._state
+            
+            gps_position = self.gps_handler.get_current_position()
+            gps_target_position = self._target_point
+            current_heading = self.current_heading = self.heading['value']
+            
+            target_distance = self._distance_to_targe = nav_math.distance_m(
+                gps_position.latitude,
+                gps_position.longitude,
+                gps_target_position.latitude,
+                gps_target_position.longitude
             )
-
-
-            if self._distance_to_target <= self.arrival_threshold:
-                self._arrived()
-                return
-
-
-            self.current_heading = self.heading["value"]
-
-            self.target_heading = NavigationMath.bearing(
-                pos.latitude,
-                pos.longitude,
-                self._target_point.latitude,
-                self._target_point.longitude
+            
+            target_heading = self.target_heading = nav_math.bearing(
+                gps_position.latitude,
+                gps_position.longitude,
+                gps_target_position.latitude,
+                gps_target_position.longitude
             )
-
-            self.heading_difference = NavigationMath.normalize_angle(
-                self.target_heading - self.current_heading
+            
+            target_heading_difference = self.heading_difference  = nav_math.heading_difference(
+                current_heading, 
+                target_heading
             )
+            
+            heading_tolerance = self.heading_tolerance     
+            arrival_distance_limit = self.arrival_distance_limit 
+            
+            print("+Navigation+")
+            print(f"    Navigation process started")
+            print(f"    [gps target position] lat:{gps_target_position.latitude} lon: {gps_target_position.longitude}")
+            print(f"    [gps actual position] lat:{gps_position.latitude} lon: {gps_position.longitude}")
+            print(f"    [current heading] {current_heading:.0f}")
+            print(f"    [target  heading] {target_heading:.0f}")
+            print(f"    [target  heading difference] {target_heading_difference:.0f}")
+            print(f"    [heading tolerance] {heading_tolerance}")
+            print(f"    [distance] {target_distance:.0f}m")
+            print(f"    [distance] {arrival_distance_limit:.0f}m")
+            print(f"    [navigation state] {state}")
 
+            self._turning_into_the_direction_of_the_target(target_heading_difference, heading_tolerance)
+            
+            if abs(target_heading_difference) <= heading_tolerance:
+            
+                if target_distance <= arrival_distance_limit:
+                    self._arrived()
+                else:
+                    print("    [OPERATION] FORWARD")
+                    self._set_command("FORWARD")
+                
+            print("-Navigation-")
+            time.sleep(0.05)
 
-            command = self.controller.calculate_command(
-                self.heading_difference
-            )
-
-            self._set_command(command)
-
-            self._debug(command)
-
-            time.sleep(1)
-
-
-        self._set_command("STOP")
-
-
+    def _turning_into_the_direction_of_the_target(self, target_heading_difference, heading_tolerance):
+        
+        #print(f"[drive command] {self.drive_command}")
+        if target_heading_difference > heading_tolerance and self.drive_command["value"] != "RIGHT":
+            print("    +Turning+")
+            print(f"        [OPERATION] RIGHT")
+            self._set_command("RIGHT")
+            print("    -Turning-")
+        if target_heading_difference < -heading_tolerance and self.drive_command["value"] != "LEFT":
+            print("    +Turning+")
+            print(f"        [OPERATION] LEFT")
+            self._set_command("LEFT")
+            print("    -Turning-")
+        if abs(target_heading_difference) <= heading_tolerance and self.drive_command["value"] != "STOP":
+            print("    +Turning+")
+            print(f"        [OPERATION] STOP")
+            self._set_command("STOP")
+            print("    -Turning-")
+    
     def _arrived(self):
 
         print("Target reached")
@@ -134,18 +162,6 @@ class Navigation:
 
         self._state = "done"
         self._active = False
-
-
-    def _debug(self, command):
-        print(
-            f"[NAV] "
-            f"Dist:{self._distance_to_target:.1f}m | "
-            f"Head:{self.current_heading:.0f}° | "
-            f"Target:{self.target_heading:.0f}° | "
-            f"Diff:{self.heading_difference:.0f}° | "
-            f"CMD:{command}"
-        )
-
 
     def get_status(self):
 

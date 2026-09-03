@@ -9,10 +9,10 @@ Device.pin_factory = LGPIOFactory()
 
 class MotorDriver:
     def __init__(self):
-        self.LF = OutputDevice(20)
-        self.LB = OutputDevice(26)
-        self.RF = OutputDevice(16)
-        self.RB = OutputDevice(19)
+        self.LF = OutputDevice(16) # OK
+        self.LB = OutputDevice(20) # OK 
+        self.RF = OutputDevice(26) # 16 19
+        self.RB = OutputDevice(19) # 19 16
 
     def stop_all(self):
         self.LF.off()

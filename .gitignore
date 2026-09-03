@@ -39,3 +39,4 @@ Thumbs.db
 
 # --- Saját projekt-specifikus kizárások ---
 test.py
+drive_test.py
