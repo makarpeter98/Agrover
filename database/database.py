@@ -125,6 +125,7 @@ class Database:
         return result
 
     def delete_points(self, ids):
+        print("database delete point")
         for pid in ids:
             self.conn.execute(
                 """
@@ -137,3 +138,23 @@ class Database:
             )
 
         self.conn.commit()
+    
+    def set_visited(self, point_id, visited):
+        
+        print("set visited: ", point_id)
+        
+        self.conn.execute(
+            """
+        UPDATE points
+        SET visited=?
+        WHERE id=?
+        """,
+            (
+                int(visited),
+                point_id
+            )
+        )
+
+        self.conn.commit()
+
+

@@ -6,16 +6,29 @@ import logging
 
 
 class WebUIService:
-    def __init__(self, command_queue, gps_handler, point_service, navigation):
+
+    def __init__(
+        self,
+        command_queue,
+        gps_handler,
+        point_service,
+        navigation
+    ):
         self.command_queue = command_queue
         self.gps_handler = gps_handler
         self.point_service = point_service
         self.navigation = navigation
 
+
     def start(self):
-        threading.Thread(target=self.run, daemon=True).start()
+        threading.Thread(
+            target=self.run,
+            daemon=True
+        ).start()
+
 
     def run(self):
+
         ui = WebUI(
             self.command_queue,
             self.gps_handler,
@@ -25,6 +38,8 @@ class WebUIService:
             self.point_service.load_points,
             self.point_service.delete_points,
             self.navigation,
+            self.point_service.set_visited,
             True
         )
+
         ui.run()

@@ -1,186 +1,151 @@
+html
 {% extends "base.html" %}
 
 {% block content %}
 
-<h1>Database</h1>
+<div class="page-header">
 
-<div style="margin-bottom:20px;">
-
-    <button onclick="loadDB()">
-        Betöltés DB-ből
-    </button>
-
-    <button onclick="save()">
-        Kijelöltek mentése
-    </button>
-
-    <button onclick="del()">
-        Kijelöltek törlése
-    </button>
-
-    <button onclick="allSelect()">
-        Összes kijelöl
-    </button>
+    <div>
+        <h1>Database</h1>
+        <p>Waypoint database management</p>
+    </div>
 
 </div>
 
 
-<table border="1" id="table" style="width:100%; text-align:center; cursor:pointer;"></table>
+<div class="card database-card">
+
+    <div class="card-header">
+
+        <span>Waypoint Database</span>
+
+        <div class="database-summary">
+
+            <span id="point-count">
+                0 POINTS
+            </span>
+
+            <span id="selected-count">
+                0 SELECTED
+            </span>
+
+        </div>
+
+    </div>
 
 
-<script>
+    <div class="card-body">
 
-let currentSort = {
-    column: null,
-    asc: true
-};
+        <div class="database-toolbar">
 
+            <div class="database-actions">
 
-async function refresh() {
-
-    let r = await fetch("/points");
-    let data = await r.json();
-
-    renderTable(data);
-}
+                <button
+                    class="button"
+                    type="button"
+                    onclick="loadDB()">
+                    Load from DB
+                </button>
 
 
-function renderTable(data) {
-
-    let t = document.getElementById("table");
-
-    t.innerHTML =
-`
-<tr>
-    <th onclick="sortTable('latitude')">LAT</th>
-    <th onclick="sortTable('longitude')">LON</th>
-    <th onclick="sortTable('time')">TIME</th>
-    <th onclick="sortTable('sequence')">SEQ</th>
-    <th onclick="sortTable('in_database')">DB</th>
-    <th onclick="sortTable('visited')">VISITED</th>
-    <th>SELECT</th>
-</tr>
-`;
-
-    data.forEach(p => {
-
-        t.innerHTML +=
-`
-<tr>
-    <td>${p.latitude}</td>
-    <td>${p.longitude}</td>
-    <td>${p.time}</td>
-    <td>${p.sequence}</td>
-    <td>${p.in_database}</td>
-    <td>${p.visited}</td>
-    <td>
-        <input
-            class="point"
-            data-id="${p.uid}"
-            type="checkbox">
-    </td>
-</tr>
-`;
-    });
-
-    window._tableData = data;
-}
+                <button
+                    class="button"
+                    type="button"
+                    onclick="saveSelected()">
+                    Save selected
+                </button>
 
 
-function sortTable(column) {
-
-    let data = window._tableData;
-
-    if (!data) return;
-
-    if (currentSort.column === column) {
-        currentSort.asc = !currentSort.asc;
-    } else {
-        currentSort.column = column;
-        currentSort.asc = true;
-    }
-
-    data.sort((a, b) => {
-
-        let x = a[column];
-        let y = b[column];
-
-        // szám vagy string összehasonlítás
-        if (!isNaN(x) && !isNaN(y)) {
-            x = Number(x);
-            y = Number(y);
-        }
-
-        if (x < y) return currentSort.asc ? -1 : 1;
-        if (x > y) return currentSort.asc ? 1 : -1;
-        return 0;
-    });
-
-    renderTable(data);
-}
+                <button
+                    class="button button-danger"
+                    type="button"
+                    onclick="deleteSelected()">
+                    Delete selected
+                </button>
 
 
-function selected() {
-    return [...document.querySelectorAll(".point:checked")]
-        .map(x => x.dataset.id);
-}
+                <button
+                    class="button"
+                    type="button"
+                    onclick="selectAll()">
+                    Select all
+                </button>
+
+            </div>
+
+        </div>
 
 
-async function save() {
+        <div class="database-table-wrapper">
 
-    await fetch(
-        "/db/save",
-        {
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                ids:selected()
-            })
-        }
-    );
+            <table id="database-table">
 
-    refresh();
-}
+                <thead>
+
+                    <tr>
+
+                        <th data-column="latitude">
+                            LAT
+                            <span class="sort-indicator"></span>
+                        </th>
 
 
-async function del() {
-
-    await fetch(
-        "/points/delete",
-        {
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                ids:selected()
-            })
-        }
-    );
-
-    refresh();
-}
+                        <th data-column="longitude">
+                            LON
+                            <span class="sort-indicator"></span>
+                        </th>
 
 
-async function loadDB() {
-
-    await fetch("/db/load");
-    refresh();
-}
-
-
-function allSelect() {
-
-    document
-        .querySelectorAll(".point")
-        .forEach(x => x.checked = true);
-}
+                        <th data-column="time">
+                            TIME
+                            <span class="sort-indicator"></span>
+                        </th>
 
 
-refresh();
+                        <th data-column="sequence">
+                            SEQ
+                            <span class="sort-indicator"></span>
+                        </th>
 
-</script>
+
+                        <th data-column="in_database">
+                            DB
+                            <span class="sort-indicator"></span>
+                        </th>
+
+
+                        <th data-column="visited">
+                            VISITED
+                            <span class="sort-indicator"></span>
+                        </th>
+
+
+                        <th class="select-column">
+                            SELECT
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="database-table-body">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}
+
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='js/database.js') }}"></script>
+
+{% endblock %}
+

@@ -1,5 +1,4 @@
-# viewcontroller/web_ui.py
-
+#viewcontroller/web_ui.py
 from flask import Flask, render_template, jsonify, request
 from database.map_point import MapPoint
 import logging
@@ -17,6 +16,7 @@ class WebUI:
         load_points,
         clear_points,
         navigation,
+        set_visited,
         enable_flask_logs=False
     ):
 
@@ -29,6 +29,7 @@ class WebUI:
         self.save_points = save_points
         self.load_points = load_points
         self.clear_points = clear_points
+        self.set_visited = set_visited
 
         self.navigation = navigation
 
@@ -39,30 +40,44 @@ class WebUI:
         self.register_routes()
 
 
-
     def register_routes(self):
+
+        # ---------------------------------------------------------
+        # PAGES
+        # ---------------------------------------------------------
 
         @self.app.route("/")
         def index():
-            return render_template("manual.html")
+
+            return render_template(
+                "manual.html"
+            )
 
 
         @self.app.route("/map")
         def map_page():
-            return render_template("map.html")
+
+            return render_template(
+                "map.html"
+            )
 
 
         @self.app.route("/database")
         def database():
-            return render_template("database.html")
 
+            return render_template(
+                "database.html"
+            )
 
 
         # ---------------------------------------------------------
         # MANUAL CONTROL
         # ---------------------------------------------------------
 
-        @self.app.route("/command", methods=["POST"])
+        @self.app.route(
+            "/command",
+            methods=["POST"]
+        )
         def command():
 
             cmd = request.json["command"]
@@ -78,7 +93,6 @@ class WebUI:
             })
 
 
-
         # ---------------------------------------------------------
         # GPS
         # ---------------------------------------------------------
@@ -86,13 +100,18 @@ class WebUI:
         @self.app.route("/gps")
         def gps():
 
-            data = self.gps_handler.get_current_position()
+            data = (
+                self.gps_handler
+                .get_current_position()
+            )
 
             if data is None:
+
                 return jsonify({
                     "latitude": None,
                     "longitude": None
                 })
+
 
             return jsonify({
                 "latitude": data.latitude,
@@ -100,12 +119,14 @@ class WebUI:
             })
 
 
-
         # ---------------------------------------------------------
         # MAP POINTS
         # ---------------------------------------------------------
 
-        @self.app.route("/map_point", methods=["POST"])
+        @self.app.route(
+            "/map_point",
+            methods=["POST"]
+        )
         def map_point():
 
             data = request.json
@@ -128,7 +149,6 @@ class WebUI:
             })
 
 
-
         @self.app.route("/points")
         def points():
 
@@ -138,12 +158,14 @@ class WebUI:
             ])
 
 
-
         # ---------------------------------------------------------
         # DATABASE
         # ---------------------------------------------------------
 
-        @self.app.route("/db/save", methods=["POST"])
+        @self.app.route(
+            "/db/save",
+            methods=["POST"]
+        )
         def db_save():
 
             data = request.json or {}
@@ -151,14 +173,16 @@ class WebUI:
             ids = data.get("ids")
 
             if ids is None:
-                ids = data.get("indexes", [])
+                ids = data.get(
+                    "indexes",
+                    []
+                )
 
             self.save_points(ids)
 
             return jsonify({
                 "ok": True
             })
-
 
 
         @self.app.route("/db/load")
@@ -171,16 +195,48 @@ class WebUI:
             })
 
 
+        @self.app.route("/db/visited", methods=["POST"])
+        def db_visited():
 
-        @self.app.route("/points/delete", methods=["POST"])
+            data = request.json or {}
+
+            point_uid = data.get("id")
+            visited = data.get("visited")
+
+            if point_uid is None or visited is None:
+
+                return jsonify({
+                    "ok": False,
+                    "error": "Missing id or visited"
+                }), 400
+
+
+            self.set_visited(
+                point_uid,
+                bool(visited)
+            )
+
+
+            return jsonify({
+                "ok": True
+            })
+        
+        @self.app.route(
+            "/points/delete",
+            methods=["POST"]
+        )
+        
         def delete_points():
-
+            print("delete point: ")
             data = request.json or {}
 
             ids = data.get("ids")
 
             if ids is None:
-                ids = data.get("indexes", [])
+                ids = data.get(
+                    "indexes",
+                    []
+                )
 
             self.clear_points(ids)
 
@@ -189,8 +245,10 @@ class WebUI:
             })
 
 
-
-        @self.app.route("/points/clear", methods=["POST"])
+        @self.app.route(
+            "/points/clear",
+            methods=["POST"]
+        )
         def clear():
 
             data = request.json or {}
@@ -198,7 +256,10 @@ class WebUI:
             ids = data.get("ids")
 
             if ids is None:
-                ids = data.get("indexes", [])
+                ids = data.get(
+                    "indexes",
+                    []
+                )
 
             self.clear_points(ids)
 
@@ -207,12 +268,14 @@ class WebUI:
             })
 
 
-
         # ---------------------------------------------------------
         # NAVIGATION
         # ---------------------------------------------------------
 
-        @self.app.route("/nav/start", methods=["POST"])
+        @self.app.route(
+            "/nav/start",
+            methods=["POST"]
+        )
         def nav_start():
 
             if self.navigation:
@@ -223,8 +286,10 @@ class WebUI:
             })
 
 
-
-        @self.app.route("/nav/stop", methods=["POST"])
+        @self.app.route(
+            "/nav/stop",
+            methods=["POST"]
+        )
         def nav_stop():
 
             if self.navigation:
@@ -233,7 +298,6 @@ class WebUI:
             return jsonify({
                 "ok": True
             })
-
 
 
         @self.app.route("/nav/status")
@@ -255,7 +319,6 @@ class WebUI:
             )
 
 
-
         # ---------------------------------------------------------
         # COMMAND STATUS
         # ---------------------------------------------------------
@@ -264,19 +327,28 @@ class WebUI:
         def command_status():
 
             return jsonify({
-                "command": self.drive_command["value"]
+                "command":
+                    self.drive_command["value"]
             })
-
 
 
     def run(self):
 
-        log = logging.getLogger("werkzeug")
+        log = logging.getLogger(
+            "werkzeug"
+        )
 
         if self.enable_flask_logs:
-            log.setLevel(logging.INFO)
+
+            log.setLevel(
+                logging.INFO
+            )
+
         else:
-            log.setLevel(logging.ERROR)
+
+            log.setLevel(
+                logging.ERROR
+            )
 
 
         self.app.run(
@@ -285,3 +357,4 @@ class WebUI:
             debug=False,
             use_reloader=False
         )
+

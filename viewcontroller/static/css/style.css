@@ -1,0 +1,1494 @@
+/* =========================================================
+GLOBAL
+========================================================= */
+
+* {
+  box-sizing: border-box;
+  }
+
+html,
+body {
+
+
+margin: 0;
+padding: 0;
+
+min-height: 100%;
+
+background: #0b1015;
+
+color: #e7edf3;
+
+font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+
+}
+
+body {
+min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+font: inherit;
+}
+
+/* =========================================================
+TOP BAR
+========================================================= */
+
+.topbar {
+
+
+height: 64px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+padding: 0 28px;
+
+background: #10161d;
+
+border-bottom: 1px solid #202a34;
+
+position: sticky;
+
+top: 0;
+
+z-index: 100;
+
+
+}
+
+/* =========================================================
+BRAND
+========================================================= */
+
+.brand {
+
+
+display: flex;
+
+align-items: center;
+
+gap: 11px;
+
+color: #f1f5f8;
+
+text-decoration: none;
+
+}
+
+.brand-icon {
+
+
+width: 34px;
+height: 34px;
+
+display: flex;
+
+align-items: center;
+justify-content: center;
+
+border-radius: 9px;
+
+background: #18232d;
+
+border: 1px solid #2b3946;
+
+color: #d9e3eb;
+
+font-size: 16px;
+
+font-weight: bold;
+
+
+}
+
+.brand-text {
+
+
+display: flex;
+
+flex-direction: column;
+
+line-height: 1;
+
+
+}
+
+.brand-name {
+
+
+font-size: 15px;
+
+font-weight: bold;
+
+letter-spacing: 1.5px;
+
+
+}
+
+.brand-subtitle {
+
+
+margin-top: 4px;
+
+color: #697786;
+
+font-size: 9px;
+
+font-weight: bold;
+
+letter-spacing: 1.6px;
+
+
+}
+
+/* =========================================================
+NAVIGATION
+========================================================= */
+
+.main-nav {
+
+
+display: flex;
+
+align-items: center;
+
+gap: 5px;
+
+
+}
+
+.main-nav a {
+
+display: flex;
+
+align-items: center;
+
+gap: 7px;
+
+padding: 9px 14px;
+
+border-radius: 8px;
+
+color: #8f9ca9;
+
+text-decoration: none;
+
+font-size: 13px;
+
+font-weight: bold;
+
+transition:
+    background 0.15s ease,
+    color 0.15s ease;
+
+
+}
+
+.main-nav a:hover {
+
+
+color: #e2e9ef;
+
+background: #17212a;
+
+
+}
+
+.main-nav a.active {
+
+
+color: #edf3f7;
+
+background: #1a2630;
+
+
+}
+
+.nav-indicator {
+
+
+width: 5px;
+
+height: 5px;
+
+border-radius: 50%;
+
+background: #6c7a88;
+
+
+}
+
+.main-nav a.active .nav-indicator {
+
+
+background: #dce7f0;
+
+box-shadow:
+    0 0 8px rgba(220, 231, 240, 0.35);
+
+
+}
+
+/* =========================================================
+SYSTEM STATUS
+========================================================= */
+
+.system-status {
+
+
+display: flex;
+
+align-items: center;
+
+gap: 8px;
+
+padding: 7px 11px;
+
+border: 1px solid #202d38;
+
+border-radius: 20px;
+
+background: #111a21;
+
+color: #81909e;
+
+font-size: 10px;
+
+font-weight: bold;
+
+letter-spacing: 1px;
+
+
+}
+
+.system-status-dot {
+
+
+width: 7px;
+height: 7px;
+
+border-radius: 50%;
+
+background: #45d483;
+
+box-shadow:
+    0 0 9px rgba(69, 212, 131, 0.45);
+
+
+}
+
+/* =========================================================
+PAGE
+========================================================= */
+
+.page-container {
+
+
+width: 100%;
+
+max-width: 1200px;
+
+margin: 0 auto;
+
+padding: 32px 24px 60px;
+
+
+}
+
+/* =========================================================
+MOBILE MENU
+========================================================= */
+
+.mobile-menu-button {
+
+
+display: none;
+
+width: 38px;
+height: 38px;
+
+align-items: center;
+justify-content: center;
+
+flex-direction: column;
+
+gap: 4px;
+
+border: 1px solid #293743;
+
+border-radius: 9px;
+
+background: #151f27;
+
+cursor: pointer;
+
+
+}
+
+.mobile-menu-button span {
+
+
+display: block;
+
+width: 16px;
+height: 2px;
+
+background: #dce5ec;
+
+border-radius: 2px;
+
+
+}
+
+/* =========================================================
+PAGE HEADER
+========================================================= */
+
+.page-header {
+
+
+margin-bottom: 28px;
+
+
+}
+
+.page-header h1 {
+
+
+margin: 0;
+
+font-size: 28px;
+
+font-weight: bold;
+
+letter-spacing: -0.5px;
+
+color: #edf3f7;
+
+
+}
+
+.page-header p {
+
+
+margin: 7px 0 0;
+
+color: #687786;
+
+font-size: 13px;
+
+
+}
+
+/* =========================================================
+CARDS
+========================================================= */
+
+.card {
+
+
+background: #10171e;
+
+border: 1px solid #202b35;
+
+border-radius: 12px;
+
+overflow: hidden;
+
+
+}
+
+.card-header {
+
+
+padding: 17px 20px;
+
+border-bottom: 1px solid #202b35;
+
+background: #121b23;
+
+
+}
+
+.card-header h2 {
+
+
+margin: 0;
+
+color: #dce5eb;
+
+font-size: 14px;
+
+letter-spacing: 0.4px;
+
+
+}
+
+.card-header p {
+
+
+margin: 5px 0 0;
+
+color: #647382;
+
+font-size: 11px;
+
+
+}
+
+.card-body {
+
+
+padding: 24px;
+
+
+}
+
+/* =========================================================
+TWO COLUMN LAYOUT
+========================================================= */
+
+.two-column {
+
+```
+display: grid;
+
+grid-template-columns: 1fr 1fr;
+
+gap: 20px;
+
+align-items: start;
+
+
+}
+
+/* =========================================================
+STATUS
+========================================================= */
+
+.status-box {
+
+
+border: 1px solid #202d38;
+
+border-radius: 10px;
+
+background: #0d141a;
+
+padding: 15px;
+
+
+}
+
+.status-row {
+
+
+display: flex;
+
+justify-content: space-between;
+
+align-items: center;
+
+min-height: 32px;
+
+border-bottom: 1px solid #1c2730;
+
+
+}
+
+.status-row:last-child {
+
+
+border-bottom: none;
+
+
+}
+
+.status-label {
+
+
+color: #687785;
+
+font-size: 11px;
+
+
+}
+
+.status-value {
+
+
+color: #dbe5eb;
+
+font-size: 12px;
+
+font-weight: bold;
+
+text-align: right;
+
+max-width: 65%;
+
+word-break: break-word;
+
+
+}
+
+/* =========================================================
+SECTION TITLE
+========================================================= */
+
+.section-title {
+
+
+margin: 22px 0 10px;
+
+color: #71808d;
+
+font-size: 10px;
+
+font-weight: bold;
+
+letter-spacing: 1.3px;
+
+text-transform: uppercase;
+
+
+}
+
+/* =========================================================
+DATA GRID
+========================================================= */
+
+.data-grid {
+
+
+display: grid;
+
+grid-template-columns: 1fr 1fr;
+
+gap: 10px;
+
+
+}
+
+.data-item {
+
+
+padding: 14px;
+
+border: 1px solid #202c36;
+
+border-radius: 9px;
+
+background: #0e151b;
+
+
+}
+
+.data-label {
+
+
+margin-bottom: 7px;
+
+color: #5f6e7b;
+
+font-size: 9px;
+
+font-weight: bold;
+
+letter-spacing: 1px;
+
+text-transform: uppercase;
+
+
+}
+
+.data-value {
+
+
+color: #dce6ec;
+
+font-size: 13px;
+
+font-weight: bold;
+
+word-break: break-word;
+
+
+}
+
+/* =========================================================
+BUTTONS
+========================================================= */
+
+.button {
+
+
+border: 1px solid #2b3a47;
+
+border-radius: 9px;
+
+background: #17232d;
+
+color: #dce6ec;
+
+font-weight: bold;
+
+cursor: pointer;
+
+transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    transform 0.08s ease;
+
+
+}
+
+.button:hover {
+
+
+background: #1e2c37;
+
+border-color: #3b4d5c;
+
+
+}
+
+.button:active {
+
+
+transform: scale(0.97);
+
+
+}
+
+.button-danger {
+
+
+background: #241a1d;
+
+border-color: #4c3035;
+
+color: #e9b7bd;
+
+
+}
+
+.button-danger:hover {
+
+
+background: #342126;
+
+border-color: #694048;
+
+
+}
+
+/* =========================================================
+   MANUAL CONTROL
+   ========================================================= */
+
+.remote {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.remote-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.remote .button {
+    width: 90px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.control-label {
+    margin-bottom: 6px;
+    color: #687785;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+
+/* =========================================================
+   NAVIGATION BUTTONS
+   ========================================================= */
+
+.nav-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.nav-buttons .button {
+    min-height: 46px;
+}
+
+
+
+/* =========================================================
+MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+
+
+.two-column {
+
+    grid-template-columns: 1fr;
+}
+
+
+}
+
+@media (max-width: 720px) {
+
+
+.topbar {
+
+    height: 58px;
+
+    padding: 0 14px;
+}
+
+
+.brand-subtitle {
+
+    display: none;
+}
+
+
+.brand-icon {
+
+    width: 32px;
+    height: 32px;
+}
+
+
+.brand-name {
+
+    font-size: 14px;
+}
+
+
+.system-status {
+
+    display: none;
+}
+
+
+.mobile-menu-button {
+
+    display: flex;
+}
+
+
+.main-nav {
+
+    display: none;
+
+    position: absolute;
+
+    top: 58px;
+
+    left: 0;
+
+    right: 0;
+
+    padding: 8px;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    background: #10161d;
+
+    border-bottom: 1px solid #202a34;
+
+    box-shadow:
+        0 12px 25px rgba(0, 0, 0, 0.3);
+}
+
+
+.main-nav.open {
+
+    display: flex;
+}
+
+
+.main-nav a {
+
+    padding: 13px 14px;
+}
+
+
+.page-container {
+
+    padding: 20px 12px 40px;
+}
+
+
+.page-header h1 {
+
+    font-size: 24px;
+}
+
+
+.card-body {
+
+    padding: 18px;
+}
+
+
+.data-grid {
+
+    grid-template-columns: 1fr;
+}
+}
+
+/* =========================================================
+   MAP
+   ========================================================= */
+
+#map {
+    width: 100%;
+    height: 600px;
+    border: 1px solid #202b35;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* =========================================================
+DATABASE
+========================================================= */
+
+.database-card {
+width: 100%;
+}
+
+.database-summary {
+display: flex;
+gap: 18px;
+color: #657582;
+font-size: 10px;
+font-weight: bold;
+letter-spacing: 1px;
+}
+
+.database-toolbar {
+margin-bottom: 18px;
+}
+
+.database-actions {
+display: flex;
+flex-wrap: wrap;
+gap: 9px;
+}
+
+.database-actions .button {
+min-height: 42px;
+}
+
+.database-table-wrapper {
+width: 100%;
+overflow-x: auto;
+border: 1px solid #202c36;
+border-radius: 9px;
+}
+
+#database-table {
+width: 100%;
+border-collapse: collapse;
+min-width: 760px;
+}
+
+#database-table th {
+padding: 12px 13px;
+background: #101820;
+border-bottom: 1px solid #26343f;
+color: #71818d;
+font-size: 10px;
+font-weight: bold;
+letter-spacing: 1px;
+text-align: center;
+white-space: nowrap;
+user-select: none;
+}
+
+#database-table th[data-column] {
+cursor: pointer;
+transition:
+background 0.12s ease,
+color 0.12s ease;
+}
+
+#database-table th[data-column]:hover {
+background: #16212a;
+color: #b8c5ce;
+}
+
+#database-table td {
+padding: 11px 13px;
+border-bottom: 1px solid #1b2730;
+color: #b8c5ce;
+font-family: Consolas, "Courier New", monospace;
+font-size: 11px;
+text-align: center;
+white-space: nowrap;
+}
+
+#database-table tbody tr {
+background: #0d141a;
+transition: background 0.12s ease;
+}
+
+#database-table tbody tr:hover {
+background: #131d24;
+}
+
+#database-table tbody tr:last-child td {
+border-bottom: none;
+}
+
+.sort-indicator {
+display: inline-block;
+width: 10px;
+margin-left: 4px;
+color: #7e8e9a;
+font-size: 8px;
+}
+
+.select-column {
+width: 80px;
+}
+
+.point-checkbox {
+width: 15px;
+height: 15px;
+margin: 0;
+accent-color: #8798a5;
+cursor: pointer;
+}
+
+.database-state {
+color: #657582;
+}
+
+.database-state.active {
+color: #b7c4cd;
+}
+
+@media (max-width: 720px) {
+
+
+.database-summary {
+    display: none;
+}
+
+.database-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.database-actions .button {
+    width: 100%;
+}
+
+
+}
+
+css
+/* =========================================================
+   THEME TOGGLE
+   ========================================================= */
+
+.theme-toggle {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    height: 34px;
+
+    padding: 0 11px;
+
+    border: 1px solid #293743;
+
+    border-radius: 18px;
+
+    background: #151f27;
+
+    color: #9aa8b5;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+
+}
+
+.theme-toggle:hover {
+
+    background: #1b2832;
+
+    border-color: #3a4b59;
+
+    color: #dce5ec;
+
+}
+
+.theme-toggle-icon {
+
+    font-size: 15px;
+
+    line-height: 1;
+
+}
+
+.theme-toggle-label {
+
+    min-width: 31px;
+
+    text-align: center;
+
+}
+
+
+/* =========================================================
+   LIGHT MODE
+   ========================================================= */
+
+body.light-mode {
+
+    background: #f1f4f7;
+
+    color: #202a33;
+
+}
+
+
+/* ---------------------------------------------------------
+   TOP BAR
+   --------------------------------------------------------- */
+
+body.light-mode .topbar {
+
+    background: #ffffff;
+
+    border-bottom-color: #d8e0e6;
+
+}
+
+body.light-mode .brand {
+
+    color: #202a33;
+
+}
+
+body.light-mode .brand-icon {
+
+    background: #edf1f4;
+
+    border-color: #d2dbe2;
+
+    color: #36434e;
+
+}
+
+body.light-mode .brand-subtitle {
+
+    color: #82909b;
+
+}
+
+
+/* ---------------------------------------------------------
+   NAVIGATION
+   --------------------------------------------------------- */
+
+body.light-mode .main-nav a {
+
+    color: #687783;
+
+}
+
+body.light-mode .main-nav a:hover {
+
+    color: #25313a;
+
+    background: #eef2f5;
+
+}
+
+body.light-mode .main-nav a.active {
+
+    color: #202c35;
+
+    background: #e7edf1;
+
+}
+
+body.light-mode .nav-indicator {
+
+    background: #9aa7b1;
+
+}
+
+body.light-mode .main-nav a.active .nav-indicator {
+
+    background: #4c5b66;
+
+    box-shadow:
+        0 0 8px rgba(76, 91, 102, 0.25);
+
+}
+
+
+/* ---------------------------------------------------------
+   SYSTEM STATUS
+   --------------------------------------------------------- */
+
+body.light-mode .system-status {
+
+    border-color: #d7e0e6;
+
+    background: #f5f7f9;
+
+    color: #687783;
+
+}
+
+
+/* ---------------------------------------------------------
+   THEME TOGGLE
+   --------------------------------------------------------- */
+
+body.light-mode .theme-toggle {
+
+    background: #eef2f5;
+
+    border-color: #d2dbe2;
+
+    color: #53636f;
+
+}
+
+body.light-mode .theme-toggle:hover {
+
+    background: #e5ebef;
+
+    border-color: #c3cfd7;
+
+    color: #26343e;
+
+}
+
+
+/* ---------------------------------------------------------
+   PAGE
+   --------------------------------------------------------- */
+
+body.light-mode .page-header h1 {
+
+    color: #202c35;
+
+}
+
+body.light-mode .page-header p {
+
+    color: #71808b;
+
+}
+
+
+/* ---------------------------------------------------------
+   CARDS
+   --------------------------------------------------------- */
+
+body.light-mode .card {
+
+    background: #ffffff;
+
+    border-color: #d8e0e6;
+
+}
+
+body.light-mode .card-header {
+
+    background: #f7f9fa;
+
+    border-bottom-color: #d8e0e6;
+
+}
+
+body.light-mode .card-header h2 {
+
+    color: #33424d;
+
+}
+
+body.light-mode .card-header p {
+
+    color: #7a8893;
+
+}
+
+
+/* ---------------------------------------------------------
+   STATUS
+   --------------------------------------------------------- */
+
+body.light-mode .status-box {
+
+    background: #f7f9fa;
+
+    border-color: #d8e0e6;
+
+}
+
+body.light-mode .status-row {
+
+    border-bottom-color: #e1e6ea;
+
+}
+
+body.light-mode .status-label {
+
+    color: #71808b;
+
+}
+
+body.light-mode .status-value {
+
+    color: #33424d;
+
+}
+
+
+/* ---------------------------------------------------------
+   SECTION / DATA
+   --------------------------------------------------------- */
+
+body.light-mode .section-title {
+
+    color: #687783;
+
+}
+
+body.light-mode .data-item {
+
+    background: #f7f9fa;
+
+    border-color: #d8e0e6;
+
+}
+
+body.light-mode .data-label {
+
+    color: #7a8893;
+
+}
+
+body.light-mode .data-value {
+
+    color: #33424d;
+
+}
+
+
+/* ---------------------------------------------------------
+   BUTTONS
+   --------------------------------------------------------- */
+
+body.light-mode .button {
+
+    background: #edf2f5;
+
+    border-color: #cbd6dd;
+
+    color: #35444f;
+
+}
+
+body.light-mode .button:hover {
+
+    background: #e3e9ed;
+
+    border-color: #b8c5cd;
+
+}
+
+body.light-mode .button-danger {
+
+    background: #f7eeee;
+
+    border-color: #dec8cb;
+
+    color: #98545d;
+
+}
+
+body.light-mode .button-danger:hover {
+
+    background: #f1e3e5;
+
+    border-color: #d0afb4;
+
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE MENU
+   --------------------------------------------------------- */
+
+body.light-mode .mobile-menu-button {
+
+    background: #eef2f5;
+
+    border-color: #cbd6dd;
+
+}
+
+body.light-mode .mobile-menu-button span {
+
+    background: #4a5964;
+
+}
+
+body.light-mode .main-nav {
+
+    background: #ffffff;
+
+    border-bottom-color: #d8e0e6;
+
+    box-shadow:
+        0 12px 25px rgba(0, 0, 0, 0.08);
+
+}
+
+
+/* ---------------------------------------------------------
+   MAP
+   --------------------------------------------------------- */
+
+body.light-mode #map {
+
+    border-color: #d8e0e6;
+
+}
+
+
+/* ---------------------------------------------------------
+   DATABASE
+   --------------------------------------------------------- */
+
+body.light-mode .database-summary {
+
+    color: #71808b;
+
+}
+
+body.light-mode .database-table-wrapper {
+
+    border-color: #d8e0e6;
+
+}
+
+body.light-mode #database-table th {
+
+    background: #f1f4f6;
+
+    border-bottom-color: #d5dee4;
+
+    color: #687783;
+
+}
+
+body.light-mode #database-table th[data-column]:hover {
+
+    background: #e7ecef;
+
+    color: #34434e;
+
+}
+
+body.light-mode #database-table td {
+
+    border-bottom-color: #e2e7eb;
+
+    color: #4a5964;
+
+}
+
+body.light-mode #database-table tbody tr {
+
+    background: #ffffff;
+
+}
+
+body.light-mode #database-table tbody tr:hover {
+
+    background: #f4f7f8;
+
+}
+
+body.light-mode .sort-indicator {
+
+    color: #87949e;
+
+}
+
+body.light-mode .database-state {
+
+    color: #87949e;
+
+}
+
+body.light-mode .database-state.active {
+
+    color: #52616c;
+
+}
+
+
+/* ---------------------------------------------------------
+   CHECKBOX
+   --------------------------------------------------------- */
+
+body.light-mode .point-checkbox {
+
+    accent-color: #60717d;
+
+}
+

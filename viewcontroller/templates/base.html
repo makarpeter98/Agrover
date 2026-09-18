@@ -1,53 +1,24 @@
+html
 <!DOCTYPE html>
-
-<html>
+<html lang="en">
 
 <head>
 
-<title>Rover</title>
+    <meta charset="UTF-8">
 
-<style>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-body {
+    <title>
+        Rover Control System
+    </title>
 
-    margin:0;
-    background:#222;
-    color:white;
-    font-family:Arial;
-
-}
-
-
-.menu {
-
-    height:60px;
-    background:#111;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    gap:40px;
-
-}
-
-
-.menu a {
-
-    color:white;
-    text-decoration:none;
-
-}
-
-
-.content {
-
-    padding:40px;
-    text-align:center;
-
-}
-
-</style>
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
 
 </head>
 
@@ -55,28 +26,163 @@ body {
 <body>
 
 
-<div class="menu">
+    <!-- =====================================================
+         TOP BAR
+         ===================================================== -->
 
-<a href="/">
-Manual handling
-</a>
-
-<a href="/map">
-Map
-</a>
-
-<a href="/database">
-Database
-</a>
-
-</div>
+    <header class="topbar">
 
 
-{% block content %}
+        <!-- BRAND -->
 
-{% endblock %}
+        <a
+            href="/"
+            class="brand"
+        >
+
+            <div class="brand-icon">
+                R
+            </div>
+
+            <div class="brand-text">
+
+                <div class="brand-name">
+                    ROVER
+                </div>
+
+                <div class="brand-subtitle">
+                    CONTROL SYSTEM
+                </div>
+
+            </div>
+
+        </a>
+
+
+        <!-- NAVIGATION -->
+
+        <nav
+            class="main-nav"
+            id="main-nav"
+        >
+
+            <a href="/">
+
+                <span class="nav-indicator"></span>
+
+                Manual
+
+            </a>
+
+
+            <a href="/map">
+
+                <span class="nav-indicator"></span>
+
+                Map
+
+            </a>
+
+
+            <a href="/database">
+
+                <span class="nav-indicator"></span>
+
+                Database
+
+            </a>
+
+        </nav>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="system-status">
+
+            <span class="system-status-dot"></span>
+
+            ONLINE
+
+        </div>
+
+
+        <!-- THEME SWITCH -->
+
+        <button
+            class="theme-toggle"
+            id="theme-toggle"
+            type="button"
+            aria-label="Toggle light and dark mode"
+        >
+
+            <span
+                class="theme-toggle-icon"
+                id="theme-toggle-icon"
+            >
+                ☾
+            </span>
+
+            <span
+                class="theme-toggle-label"
+                id="theme-toggle-label"
+            >
+                DARK
+            </span>
+
+        </button>
+
+
+        <!-- MOBILE MENU BUTTON -->
+
+        <button
+            class="mobile-menu-button"
+            id="mobile-menu-button"
+            type="button"
+            aria-label="Open navigation"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+
+    </header>
+
+
+
+    <!-- =====================================================
+         PAGE CONTENT
+         ===================================================== -->
+
+    <main class="page-container">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+
+    <!-- =====================================================
+         COMMON JAVASCRIPT
+         ===================================================== -->
+
+    <script
+        src="{{ url_for('static', filename='js/common.js') }}"
+    ></script>
+
+
+    <!-- =====================================================
+         PAGE-SPECIFIC JAVASCRIPT
+         ===================================================== -->
+
+    {% block scripts %}
+    {% endblock %}
 
 
 </body>
 
 </html>
+

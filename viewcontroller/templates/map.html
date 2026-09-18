@@ -1,300 +1,229 @@
+html
 {% extends "base.html" %}
 
 
 {% block content %}
 
 
+<!-- =========================================================
+     LEAFLET CSS
+     ========================================================= -->
+
 <link
-rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 />
 
 
-<style>
+<!-- =========================================================
+     PAGE HEADER
+     ========================================================= -->
 
-#map {
+<div class="page-header">
 
-    height:600px;
-    width:100%;
+    <h1>
+        Map
+    </h1>
 
-}
+    <p>
+        Rover position and navigation points
+    </p>
 
+</div>
 
-</style>
 
 
+<!-- =========================================================
+     MAP LAYOUT
+     ========================================================= -->
 
-<h2>Map</h2>
+<div class="map-layout">
 
 
-<div id="map"></div>
+    <!-- =====================================================
+         MAP
+         ===================================================== -->
 
+    <section class="card map-card">
 
+        <div class="card-header">
 
-<script src=
-"https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
+            <h2>
+                Rover Map
+            </h2>
 
+            <p>
+                Live rover position and waypoints
+            </p>
 
+        </div>
 
-<script>
 
+        <div class="map-container">
 
-let map =
-L.map("map");
+            <div id="map"></div>
 
+        </div>
 
+    </section>
 
-L.tileLayer(
-    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
 
-        maxZoom:19,
 
-        attribution:
-        "© OpenStreetMap"
+    <!-- =====================================================
+         MAP PANEL
+         ===================================================== -->
 
-    }
-)
-.addTo(map);
+    <section class="card map-panel">
 
+        <div class="card-header">
 
+            <h2>
+                Map
+            </h2>
 
+            <p>
+                Map controls and waypoints
+            </p>
 
-let roverMarker = null;
+        </div>
 
 
-let firstFix = true;
+        <div class="card-body">
 
 
+            <!-- =================================================
+                 WAYPOINT SUMMARY
+                 ================================================= -->
 
-let redIcon =
-L.icon(
-{
+            <div class="section-title">
+                Waypoints
+            </div>
 
-    iconUrl:
-    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
 
+            <div class="data-grid">
 
-    shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 
+                <div class="data-item">
 
-    iconSize:
-    [25,41],
+                    <div class="data-label">
+                        Points
+                    </div>
 
+                    <div
+                        class="data-value"
+                        id="waypoint-count"
+                    >
+                        0
+                    </div>
 
-    iconAnchor:
-    [12,41]
+                </div>
 
-});
 
+                <div class="data-item">
 
+                    <div class="data-label">
+                        Active Target
+                    </div>
 
+                    <div
+                        class="data-value"
+                        id="active-target"
+                    >
+                        -
+                    </div>
 
-let blueIcon =
-L.icon(
-{
+                </div>
 
-    iconUrl:
-    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
 
+            </div>
 
-    shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
 
 
-    iconSize:
-    [25,41],
+            <!-- =================================================
+                 MAP CONTROLS
+                 ================================================= -->
 
+            <div class="section-title">
+                Map Controls
+            </div>
 
-    iconAnchor:
-    [12,41]
 
-});
+            <div class="map-controls">
 
+                <button
+                    class="button"
+                    type="button"
+                    onclick="centerOnRover()"
+                >
+                    Center on Rover
+                </button>
 
 
+                <button
+                    class="button"
+                    type="button"
+                    onclick="centerOnTarget()"
+                >
+                    Center on Target
+                </button>
 
 
+                <button
+                    class="button"
+                    type="button"
+                    onclick="fitRoute()"
+                >
+                    Fit Route
+                </button>
 
-async function updateGPS()
-{
+            </div>
 
-    let response =
-        await fetch("/gps");
 
 
-    let gps =
-        await response.json();
+            <!-- =================================================
+                 WAYPOINT LIST
+                 ================================================= -->
 
+            <div class="section-title">
+                Waypoints
+            </div>
 
 
-    if(
-        gps.latitude == null
-    )
-    {
+            <div
+                class="waypoint-list"
+                id="waypoint-list"
+            >
 
-        return;
+                <div class="waypoint-empty">
+                    No waypoints
+                </div>
 
-    }
+            </div>
 
 
+        </div>
 
-    let pos =
-    [
-        gps.latitude,
-        gps.longitude
-    ];
+    </section>
 
 
+</div>
 
-    if(roverMarker == null)
-    {
-
-
-        roverMarker =
-        L.marker(
-            pos,
-            {
-                icon:redIcon
-            }
-        )
-        .addTo(map);
-
-
-
-    }
-    else
-    {
-
-        roverMarker
-        .setLatLng(pos);
-
-    }
-
-
-
-
-    if(firstFix)
-    {
-
-        map.setView(
-            pos,
-            18
-        );
-
-
-        firstFix=false;
-
-    }
-
-
-}
-
-
-
-
-async function updatePoints()
-{
-
-
-    let response =
-        await fetch("/points");
-
-
-    let points =
-        await response.json();
-
-
-
-    points.forEach(
-        p =>
-        {
-
-
-            L.marker(
-            [
-                p.latitude,
-                p.longitude
-            ],
-            {
-                icon:blueIcon
-            })
-            .addTo(map);
-
-
-        }
-    );
-
-
-}
-
-
-
-
-
-map.on(
-"click",
-function(e)
-{
-
-
-    fetch(
-        "/map_point",
-        {
-
-            method:"POST",
-
-            headers:
-            {
-                "Content-Type":
-                "application/json"
-            },
-
-
-            body:
-            JSON.stringify(
-            {
-
-                latitude:
-                e.latlng.lat,
-
-
-                longitude:
-                e.latlng.lng
-
-            })
-
-        }
-    );
-
-
-});
-
-
-
-
-updateGPS();
-
-updatePoints();
-
-
-
-setInterval(
-    updateGPS,
-    1000
-);
-
-
-setInterval(
-    updatePoints,
-    2000
-);
-
-
-
-</script>
 
 
 {% endblock %}
+
+
+
+{% block scripts %}
+
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<script
+    src="{{ url_for('static', filename='js/map.js') }}"
+></script>
+
+{% endblock %}
+

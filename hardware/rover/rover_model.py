@@ -27,23 +27,23 @@ class DriveModel:
 
     def forward(self):
         print("rover_model: foward")
-        self.hw.LF.on(); self.hw.LB.off()
-        self.hw.RF.on(); self.hw.RB.off()
+        #self.hw.LF.on(); self.hw.LB.off()
+        #self.hw.RF.on(); self.hw.RB.off()
 
     def backward(self):
         print("rover_model: backward")
-        self.hw.LF.off(); self.hw.LB.on()
-        self.hw.RF.off(); self.hw.RB.on()
+        #self.hw.LF.off(); self.hw.LB.on()
+        #self.hw.RF.off(); self.hw.RB.on()
 
     def left(self):
         print("rover_model: left")
-        self.hw.LF.off(); self.hw.LB.on()
-        self.hw.RF.on(); self.hw.RB.off()
+        #self.hw.LF.off(); self.hw.LB.on()
+        #self.hw.RF.on(); self.hw.RB.off()
 
     def right(self):
         print("rover_model: right")
-        self.hw.LF.on(); self.hw.LB.off()
-        self.hw.RF.off(); self.hw.RB.on()
+        #self.hw.LF.on(); self.hw.LB.off()
+        #self.hw.RF.off(); self.hw.RB.on()
 
     def stop(self):
         print("rover_model: stop")

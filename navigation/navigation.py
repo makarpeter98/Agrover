@@ -124,7 +124,7 @@ class Navigation:
                     self._set_command("FORWARD")
                 
             print("-Navigation-")
-            time.sleep(0.05)
+            time.sleep(2)
 
     def _turning_into_the_direction_of_the_target(self, target_heading_difference, heading_tolerance):
         

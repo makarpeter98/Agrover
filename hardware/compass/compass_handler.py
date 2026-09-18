@@ -94,7 +94,7 @@ class CompassHandler:
                     heading
                 )
 
-                time.sleep(0.25)
+                time.sleep(1)
 
             except Exception as e:
 

@@ -1,407 +1,369 @@
+html
 {% extends "base.html" %}
+
 
 {% block content %}
 
-<h1>Manual handling</h1>
 
-<div class="remote">
+<!-- =========================================================
+     PAGE HEADER
+     ========================================================= -->
 
-    <button
-        class="up"
-        onclick="send('forward')">
-        Forward
-    </button>
+<div class="page-header">
 
+    <h1>
+        Manual Control
+    </h1>
 
-    <div class="middle">
-
-        <button onclick="send('left')">
-            Left
-        </button>
-
-
-        <button
-            class="stop"
-            onclick="send('stop')">
-            Stop
-        </button>
-
-
-        <button onclick="send('right')">
-            Right
-        </button>
-
-    </div>
-
-
-    <button
-        class="down"
-        onclick="send('backward')">
-        Backward
-    </button>
-
-</div>
-
-
-<hr>
-
-
-<h2>Navigation control</h2>
-
-
-<div class="nav-control">
-
-    <button onclick="startNav()">
-        Start navigation
-    </button>
-
-
-    <button onclick="stopNav()">
-        Stop navigation
-    </button>
+    <p>
+        Direct rover control and navigation monitoring
+    </p>
 
 </div>
 
 
 
-<div class="nav-status-panel">
+<!-- =========================================================
+     MAIN LAYOUT
+     ========================================================= -->
+
+<div class="two-column">
 
 
-    <h3>Navigation status</h3>
+    <!-- =====================================================
+         MANUAL CONTROL
+         ===================================================== -->
+
+    <section class="card">
+
+        <div class="card-header">
+
+            <h2>
+                Manual Control
+            </h2>
+
+            <p>
+                Direct movement commands
+            </p>
+
+        </div>
 
 
-    <p>
-        <strong>Status:</strong>
-        <span id="nav-status">Idle</span>
-    </p>
+        <div class="card-body">
 
 
-    <p>
-        <strong>Command:</strong>
-        <span id="nav-command">-</span>
-    </p>
+            <div class="control-label">
+                Rover movement
+            </div>
+
+
+            <div class="remote">
+
+
+                <!-- FORWARD -->
+
+                <div class="remote-row">
+
+                    <button
+                        class="button"
+                        type="button"
+                        onclick="send('forward')"
+                    >
+                        Forward
+                    </button>
+
+                </div>
+
+
+                <!-- LEFT / STOP / RIGHT -->
+
+                <div class="remote-row">
+
+                    <button
+                        class="button"
+                        type="button"
+                        onclick="send('left')"
+                    >
+                        Left
+                    </button>
+
+
+                    <button
+                        class="button button-danger"
+                        type="button"
+                        onclick="send('stop')"
+                    >
+                        Stop
+                    </button>
+
+
+                    <button
+                        class="button"
+                        type="button"
+                        onclick="send('right')"
+                    >
+                        Right
+                    </button>
+
+                </div>
+
+
+                <!-- BACKWARD -->
+
+                <div class="remote-row">
+
+                    <button
+                        class="button"
+                        type="button"
+                        onclick="send('backward')"
+                    >
+                        Backward
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- NAVIGATION -->
+
+            <div class="section-title">
+                Navigation
+            </div>
+
+
+            <div class="nav-buttons">
+
+                <button
+                    class="button"
+                    type="button"
+                    onclick="startNav()"
+                >
+                    Start Navigation
+                </button>
+
+
+                <button
+                    class="button button-danger"
+                    type="button"
+                    onclick="stopNav()"
+                >
+                    Stop Navigation
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </section>
 
 
 
-    <hr>
+    <!-- =====================================================
+         NAVIGATION STATUS
+         ===================================================== -->
+
+    <section class="card">
+
+        <div class="card-header">
+
+            <h2>
+                Navigation Status
+            </h2>
+
+            <p>
+                Current rover navigation data
+            </p>
+
+        </div>
 
 
-    <h3>GPS</h3>
+        <div class="card-body">
 
 
-    <p>
-        <strong>Current position:</strong>
-        <span id="gps-position">-</span>
-    </p>
+            <!-- STATUS -->
+
+            <div class="status-box">
 
 
-    <p>
-        <strong>Target point:</strong>
-        <span id="nav-target">-</span>
-    </p>
+                <div class="status-row">
+
+                    <span class="status-label">
+                        State
+                    </span>
+
+                    <span
+                        class="status-value"
+                        id="nav-status"
+                    >
+                        -
+                    </span>
+
+                </div>
 
 
-    <p>
-        <strong>Distance:</strong>
-        <span id="nav-distance">-</span>
-    </p>
+                <div class="status-row">
+
+                    <span class="status-label">
+                        Command
+                    </span>
+
+                    <span
+                        class="status-value"
+                        id="nav-command"
+                    >
+                        -
+                    </span>
+
+                </div>
+
+
+            </div>
 
 
 
-    <hr>
+            <!-- POSITION -->
+
+            <div class="section-title">
+                Position
+            </div>
 
 
-    <h3>Heading</h3>
+            <div class="data-grid">
 
 
-    <p>
-        <strong>Current heading:</strong>
-        <span id="heading-current">-</span>°
-    </p>
+                <div class="data-item">
+
+                    <div class="data-label">
+                        Current GPS
+                    </div>
+
+                    <div
+                        class="data-value"
+                        id="gps-position"
+                    >
+                        -
+                    </div>
+
+                </div>
 
 
-    <p>
-        <strong>Target heading:</strong>
-        <span id="heading-target">-</span>°
-    </p>
+                <div class="data-item">
+
+                    <div class="data-label">
+                        Target
+                    </div>
+
+                    <div
+                        class="data-value"
+                        id="nav-target"
+                    >
+                        -
+                    </div>
+
+                </div>
 
 
-    <p>
-        <strong>Turn required:</strong>
-        <span id="heading-difference">-</span>°
-    </p>
+                <div class="data-item">
+
+                    <div class="data-label">
+                        Distance
+                    </div>
+
+                    <div
+                        class="data-value"
+                        id="nav-distance"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- HEADING -->
+
+            <div class="section-title">
+                Heading
+            </div>
+
+
+            <div class="data-grid">
+
+
+                <div class="data-item">
+
+                    <div class="data-label">
+                        Current
+                    </div>
+
+                    <div
+                        class="data-value"
+                        id="heading-current"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="data-item">
+
+                    <div class="data-label">
+                        Target
+                    </div>
+
+                    <div
+                        class="data-value"
+                        id="heading-target"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+                <div class="data-item">
+
+                    <div class="data-label">
+                        Difference
+                    </div>
+
+                    <div
+                        class="data-value"
+                        id="heading-difference"
+                    >
+                        -
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </section>
 
 
 </div>
-
-
-
-<style>
-
-
-.remote {
-
-    width:300px;
-
-    margin:auto;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-}
-
-
-
-.remote button {
-
-    width:90px;
-
-    height:70px;
-
-    margin:8px;
-
-    font-size:16px;
-
-}
-
-
-
-.middle {
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-}
-
-
-
-.stop {
-
-    background:#aa0000;
-
-    color:white;
-
-}
-
-
-
-.nav-control {
-
-    margin-top:20px;
-
-    display:flex;
-
-    gap:10px;
-
-}
-
-
-
-.nav-control button {
-
-    padding:10px 20px;
-
-    font-size:16px;
-
-}
-
-
-
-.nav-status-panel {
-
-    margin:30px auto;
-
-    max-width:450px;
-
-    text-align:left;
-
-    background:#111;
-
-    padding:20px;
-
-    border-radius:10px;
-
-}
-
-
-
-hr {
-
-    margin:20px 0;
-
-}
-
-
-</style>
-
-
-
-
-<script>
-
-
-function send(cmd)
-{
-
-    fetch("/command",
-    {
-        method:"POST",
-
-        headers:
-        {
-            "Content-Type":"application/json"
-        },
-
-        body:JSON.stringify(
-        {
-            command:cmd
-        })
-    });
-
-}
-
-
-
-function startNav()
-{
-
-    fetch("/nav/start",
-    {
-        method:"POST"
-    });
-
-}
-
-
-
-function stopNav()
-{
-
-    fetch("/nav/stop",
-    {
-        method:"POST"
-    });
-
-}
-
-
-
-
-
-function updateNavStatus()
-{
-
-
-    fetch("/nav/status")
-
-    .then(resp=>resp.json())
-
-    .then(data=>{
-
-
-        document
-        .getElementById("nav-status")
-        .textContent =
-            data.state ?? "-";
-
-
-
-        document
-        .getElementById("nav-command")
-        .textContent =
-            data.command ?? "-";
-
-
-
-        if(data.current_position)
-        {
-
-            let p=data.current_position;
-
-
-            document
-            .getElementById("gps-position")
-            .textContent =
-            `${p.latitude.toFixed(7)}, ${p.longitude.toFixed(7)}`;
-
-        }
-
-
-
-        if(data.target)
-        {
-
-            let t=data.target;
-
-
-            document
-            .getElementById("nav-target")
-            .textContent =
-            `${t.latitude.toFixed(7)}, ${t.longitude.toFixed(7)}`;
-
-        }
-
-
-
-        if(data.distance != null)
-        {
-
-            document
-            .getElementById("nav-distance")
-            .textContent =
-            data.distance.toFixed(2)+" m";
-
-        }
-
-
-
-        if(data.heading)
-        {
-
-            document
-            .getElementById("heading-current")
-            .textContent =
-            data.heading.current;
-
-
-
-            document
-            .getElementById("heading-target")
-            .textContent =
-            data.heading.target;
-
-
-
-            document
-            .getElementById("heading-difference")
-            .textContent =
-            data.heading.difference;
-
-        }
-
-
-    })
-
-    .catch(err=>
-    {
-        console.log("Navigation status error:",err);
-    });
-
-
-}
-
-
-
-setInterval(updateNavStatus,1000);
-
-
-</script>
 
 
 {% endblock %}
+
+
+
+{% block scripts %}
+
+<script
+    src="{{ url_for('static', filename='js/manual.js') }}"
+></script>
+
+{% endblock %}
+
