@@ -1492,3 +1492,91 @@ body.light-mode .point-checkbox {
 
 }
 
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+.settings-page {
+    width: 100%;
+}
+
+.settings-table-container {
+    margin-top: 30px;
+    overflow-x: auto;
+}
+
+.settings-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.settings-table th,
+.settings-table td {
+    padding: 16px 20px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.settings-table th:last-child,
+.settings-table td:last-child {
+    text-align: right;
+}
+
+.setting-name {
+    font-weight: 600;
+}
+
+.setting-description {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    opacity: 0.65;
+}
+
+
+/* Switch */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    border-radius: 26px;
+    background-color: #3a3f46;
+    border: 1px solid #68707a;
+    transition: 0.2s;
+    box-sizing: border-box;
+}
+
+.slider::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 2px;
+    top: 2px;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    transition: 0.2s;
+}
+
+.switch input:checked + .slider {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(22px);
+}

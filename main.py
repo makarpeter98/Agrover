@@ -9,6 +9,7 @@ from navigation.navigation import Navigation
 from navigation.point_service import PointService
 
 from database.database import Database
+from database.settings_service import SettingsService
 
 from hardware.gps.gps_handler import GPSHandler
 from hardware.gps.gps_data import GPSData
@@ -32,6 +33,10 @@ class RoverSystem:
         self.database = Database()
 
         self.point_service = PointService(
+            self.database
+        )
+        
+        self.settings_service = SettingsService(
             self.database
         )
         
@@ -90,7 +95,8 @@ class RoverSystem:
             self.drive_command,
             self.gps_handler,
             self.point_service,
-            self.navigation
+            self.navigation,
+            self.settings_service
         )
 
         self.debug_thread = threading.Thread(

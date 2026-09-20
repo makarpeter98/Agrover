@@ -1,8 +1,6 @@
-# viewcontroller/web_ui_service.py
-
+#viewcontroller/web_ui_service.py
 import threading
 from viewcontroller.web_ui import WebUI
-import logging
 
 
 class WebUIService:
@@ -12,15 +10,19 @@ class WebUIService:
         command_queue,
         gps_handler,
         point_service,
-        navigation
+        navigation,
+        settings_service
     ):
         self.command_queue = command_queue
         self.gps_handler = gps_handler
         self.point_service = point_service
         self.navigation = navigation
+        self.settings_service = settings_service
+
 
 
     def start(self):
+
         threading.Thread(
             target=self.run,
             daemon=True
@@ -39,6 +41,8 @@ class WebUIService:
             self.point_service.delete_points,
             self.navigation,
             self.point_service.set_visited,
+            self.settings_service.get_setting,
+            self.settings_service.set_setting,
             True
         )
 

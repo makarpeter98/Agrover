@@ -1,4 +1,5 @@
-#viewcontroller/web_ui.py
+# viewcontroller/web_ui.py
+
 from flask import Flask, render_template, jsonify, request
 from database.map_point import MapPoint
 import logging
@@ -17,6 +18,8 @@ class WebUI:
         clear_points,
         navigation,
         set_visited,
+        get_setting,
+        set_setting,
         enable_flask_logs=False
     ):
 
@@ -30,6 +33,9 @@ class WebUI:
         self.load_points = load_points
         self.clear_points = clear_points
         self.set_visited = set_visited
+
+        self.get_setting = get_setting
+        self.set_setting = set_setting
 
         self.navigation = navigation
 
@@ -68,6 +74,72 @@ class WebUI:
             return render_template(
                 "database.html"
             )
+
+
+        @self.app.route("/settings")
+        def settings():
+
+            return render_template(
+                "settings.html"
+            )
+
+
+        # ---------------------------------------------------------
+        # SETTINGS
+        # ---------------------------------------------------------
+
+        @self.app.route(
+            "/settings/<setting_name>",
+            methods=["GET"]
+        )
+        def get_setting(setting_name):
+
+            value = self.get_setting(
+                setting_name
+            )
+
+            if value is None:
+
+                return jsonify({
+                    "ok": False,
+                    "error": "Setting not found"
+                }), 404
+
+
+            return jsonify({
+                "ok": True,
+                "setting_name": setting_name,
+                "value": value
+            })
+
+
+        @self.app.route(
+            "/settings/<setting_name>",
+            methods=["POST"]
+        )
+        def set_setting(setting_name):
+
+            data = request.json or {}
+
+            if "value" not in data:
+
+                return jsonify({
+                    "ok": False,
+                    "error": "Missing value"
+                }), 400
+
+
+            self.set_setting(
+                setting_name,
+                data["value"]
+            )
+
+
+            return jsonify({
+                "ok": True,
+                "setting_name": setting_name,
+                "value": data["value"]
+            })
 
 
         # ---------------------------------------------------------
@@ -195,7 +267,10 @@ class WebUI:
             })
 
 
-        @self.app.route("/db/visited", methods=["POST"])
+        @self.app.route(
+            "/db/visited",
+            methods=["POST"]
+        )
         def db_visited():
 
             data = request.json or {}
@@ -220,14 +295,16 @@ class WebUI:
             return jsonify({
                 "ok": True
             })
-        
+
+
         @self.app.route(
             "/points/delete",
             methods=["POST"]
         )
-        
         def delete_points():
+
             print("delete point: ")
+
             data = request.json or {}
 
             ids = data.get("ids")
@@ -357,4 +434,3 @@ class WebUI:
             debug=False,
             use_reloader=False
         )
-

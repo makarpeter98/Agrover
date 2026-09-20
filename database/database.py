@@ -13,6 +13,7 @@ class Database:
         )
 
         self.create_table()
+        self.create_settings_table()
 
     def create_table(self):
         self.conn.execute(
@@ -32,6 +33,65 @@ class Database:
             sequence INTEGER
         )
         """
+        )
+
+        self.conn.commit()
+        
+    def create_settings_table(self):
+
+        self.conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS settings
+            (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+                setting_name TEXT NOT NULL UNIQUE,
+
+                value TEXT NOT NULL
+            )
+            """
+        )
+
+        self.conn.commit()
+
+    def get_setting(self, setting_name):
+
+        row = self.conn.execute(
+            """
+            SELECT value
+            FROM settings
+            WHERE setting_name=?
+            """,
+            (
+                setting_name,
+            )
+        ).fetchone()
+
+        if row is None:
+            return None
+
+        return row[0]
+
+
+    def set_setting(self, setting_name, value):
+
+        self.conn.execute(
+            """
+            INSERT INTO settings
+            (
+                setting_name,
+                value
+            )
+            VALUES (?, ?)
+
+            ON CONFLICT(setting_name)
+            DO UPDATE SET
+                value=excluded.value
+            """,
+            (
+                setting_name,
+                str(value)
+            )
         )
 
         self.conn.commit()
