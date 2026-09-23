@@ -1,11 +1,17 @@
-# hardware/compass/compass_handler.py
-
 import time
 import math
 
 import board
 import busio
 import adafruit_qmc5883p
+
+
+# Compass kalibráció
+OFFSET_X = 0.274
+OFFSET_Y = 0.030
+
+# A szenzor fizikai orientációja miatt szükséges korrekció
+HEADING_OFFSET = 180.0
 
 
 class CompassHandler:
@@ -76,25 +82,31 @@ class CompassHandler:
 
                 mag_x, mag_y, mag_z = sensor.magnetic
 
+                # Kalibrációs offsetek eltávolítása
+                calibrated_x = mag_x - OFFSET_X
+                calibrated_y = mag_y - OFFSET_Y
+
+                # Heading számítása
                 heading = math.degrees(
                     math.atan2(
-                        mag_y,
-                        mag_x
+                        calibrated_y,
+                        calibrated_x
                     )
                 )
-                
-                heading = heading - 180
-                heading = heading % 360
+
+                # Szenzor fizikai orientációjának korrigálása
+                heading -= HEADING_OFFSET
+
+                # Normalizálás 0-360 fok közé
+                heading %= 360
 
                 print(
-                    f"Heading: {heading:6.1f}°"
+                    f"| compass_handler-> Compass heading: {heading:6.1f}°"
                 )
 
                 self.heading["value"] = round(
                     heading
                 )
-
-                time.sleep(1)
 
             except Exception as e:
 

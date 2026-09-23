@@ -152,7 +152,7 @@ class RoverSystem:
         print("Starting command processor...")
         self.command_thread.start()
 
-        print("Starting debug thread...")
+        #print("Starting debug thread...")
         self.debug_thread.start()
 
         print("Starting Web UI...")

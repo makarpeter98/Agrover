@@ -24,7 +24,7 @@ class Navigation:
         self.heading_difference = 0
 
         self.arrival_distance_limit = 1
-        self.heading_tolerance = 5
+        self.heading_tolerance = 20
 
         self._stop_event = threading.Event()
 
@@ -124,7 +124,7 @@ class Navigation:
                     self._set_command("FORWARD")
                 
             print("-Navigation-")
-            time.sleep(2)
+            time.sleep(0.5)
 
     def _turning_into_the_direction_of_the_target(self, target_heading_difference, heading_tolerance):
         
