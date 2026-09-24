@@ -17,6 +17,7 @@ class WebUI:
         load_points,
         clear_points,
         navigation,
+        navigation_direct_drive, 
         set_visited,
         get_setting,
         set_setting,
@@ -38,6 +39,7 @@ class WebUI:
         self.set_setting = set_setting
 
         self.navigation = navigation
+        self.navigation_direct_drive = navigation_direct_drive
 
         self.enable_flask_logs = enable_flask_logs
 
@@ -353,10 +355,33 @@ class WebUI:
             "/nav/start",
             methods=["POST"]
         )
+        @self.app.route(
+            "/nav/start",
+            methods=["POST"]
+        )
         def nav_start():
 
-            if self.navigation:
-                self.navigation.start_navigation()
+            direct_drive_enabled = (
+                self.get_setting(
+                    "direct_drive_enabled"
+                ) == "1"
+            )
+
+            if direct_drive_enabled:
+
+                if self.navigation:
+                    self.navigation.stop_navigation()
+
+                if self.navigation_direct_drive:
+                    self.navigation_direct_drive.start_navigation()
+
+            else:
+
+                if self.navigation_direct_drive:
+                    self.navigation_direct_drive.stop_navigation()
+
+                if self.navigation:
+                    self.navigation.start_navigation()
 
             return jsonify({
                 "ok": True
@@ -372,6 +397,9 @@ class WebUI:
             if self.navigation:
                 self.navigation.stop_navigation()
 
+            if self.navigation_direct_drive:
+                self.navigation_direct_drive.stop_navigation()
+
             return jsonify({
                 "ok": True
             })
@@ -379,6 +407,29 @@ class WebUI:
 
         @self.app.route("/nav/status")
         def nav_status():
+
+            direct_drive_enabled = (
+                self.get_setting(
+                    "direct_drive_enabled"
+                ) == "1"
+            )
+
+            if direct_drive_enabled:
+
+                if self.navigation_direct_drive is None:
+
+                    return jsonify({
+                        "state": "disabled",
+                        "target": None,
+                        "distance": None,
+                        "current_position": None,
+                        "command": self.drive_command["value"]
+                    })
+
+                return jsonify(
+                    self.navigation_direct_drive.get_status()
+                )
+
 
             if self.navigation is None:
 
@@ -394,7 +445,6 @@ class WebUI:
             return jsonify(
                 self.navigation.get_status()
             )
-
 
         # ---------------------------------------------------------
         # COMMAND STATUS

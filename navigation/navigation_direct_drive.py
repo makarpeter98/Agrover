@@ -111,6 +111,7 @@ class NavigationDirectDrive:
                 f"{len(self.SCRIPT)} "
                 f"command={command} "
                 f"remaining={remaining:.1f}s"
+                f"state={self._state}"
             )
 
             start_time = time.monotonic()
@@ -147,7 +148,9 @@ class NavigationDirectDrive:
 
 
     def get_status(self):
-
+        
+        print(f"get status: state {self._state,}")
+        
         return {
             "state": self._state,
 

@@ -11,12 +11,14 @@ class WebUIService:
         gps_handler,
         point_service,
         navigation,
+        navigation_direct_drive,
         settings_service
     ):
         self.command_queue = command_queue
         self.gps_handler = gps_handler
         self.point_service = point_service
         self.navigation = navigation
+        self.navigation_direct_drive = navigation_direct_drive
         self.settings_service = settings_service
 
 
@@ -40,6 +42,7 @@ class WebUIService:
             self.point_service.load_points,
             self.point_service.delete_points,
             self.navigation,
+            self.navigation_direct_drive,
             self.point_service.set_visited,
             self.settings_service.get_setting,
             self.settings_service.set_setting,

@@ -76,7 +76,15 @@ class RoverSystem:
             daemon=True
         )
 
-        self.navigation = NavigationDirectDrive(
+        self.navigation_direct_drive = NavigationDirectDrive(
+            self.gps_handler,
+            self.point_service,
+            self.drive_command,
+            self.heading,
+            self.database
+        )
+        
+        self.navigation = Navigation(
             self.gps_handler,
             self.point_service,
             self.drive_command,
@@ -84,11 +92,13 @@ class RoverSystem:
             self.database
         )
 
+
         self.web_ui_service = WebUIService(
             self.drive_command,
             self.gps_handler,
             self.point_service,
             self.navigation,
+            self.navigation_direct_drive,
             self.settings_service
         )
 

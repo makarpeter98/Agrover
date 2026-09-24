@@ -7,6 +7,12 @@ const xboxControllerCheckbox =
     );
 
 
+const directDriveCheckbox =
+    document.getElementById(
+        "direct-drive-enabled"
+    );
+
+
 const arrivalDistanceInput =
     document.getElementById(
         "arrival-distance-limit"
@@ -44,6 +50,27 @@ async function loadSettings()
         {
             console.error(
                 "Failed to load Xbox controller setting"
+            );
+        }
+
+
+        const directDriveResponse = await fetch(
+            "/settings/direct_drive_enabled"
+        );
+
+
+        if (directDriveResponse.ok)
+        {
+            const data =
+                await directDriveResponse.json();
+
+            directDriveCheckbox.checked =
+                data.value === "1";
+        }
+        else
+        {
+            console.error(
+                "Failed to load Direct Drive setting"
             );
         }
 
@@ -141,6 +168,53 @@ async function saveXboxControllerSetting()
 
     console.log(
         "Xbox controller setting saved:",
+        value
+    );
+}
+
+
+/* =========================================================
+   DIRECT DRIVE
+   ========================================================= */
+
+async function saveDirectDriveSetting()
+{
+    const value =
+        directDriveCheckbox.checked
+            ? "1"
+            : "0";
+
+
+    const response = await fetch(
+        "/settings/direct_drive_enabled",
+        {
+            method: "POST",
+
+            headers:
+            {
+                "Content-Type":
+                    "application/json"
+            },
+
+            body: JSON.stringify({
+                value: value
+            })
+        }
+    );
+
+
+    if (!response.ok)
+    {
+        console.error(
+            "Failed to save Direct Drive setting"
+        );
+
+        return;
+    }
+
+
+    console.log(
+        "Direct Drive setting saved:",
         value
     );
 }
@@ -255,6 +329,12 @@ async function saveHeadingTolerance()
 xboxControllerCheckbox.addEventListener(
     "change",
     saveXboxControllerSetting
+);
+
+
+directDriveCheckbox.addEventListener(
+    "change",
+    saveDirectDriveSetting
 );
 
 
