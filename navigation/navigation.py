@@ -27,6 +27,18 @@ class Navigation:
         self.heading_tolerance = 20
         
         self.database = database
+        
+        self.arrival_distance_limit = float(
+            self.database.get_setting(
+                "arrival_distance_limit"
+            )
+        )
+
+        self.heading_tolerance = float(
+            self.database.get_setting(
+                "heading_tolerance"
+            )
+        )
 
         self._stop_event = threading.Event()
 
@@ -207,5 +219,13 @@ class Navigation:
                 "current": round(self.current_heading, 1),
                 "target": round(self.target_heading, 1),
                 "difference": round(self.heading_difference, 1)
+            },
+            
+            "navigation_settings": {
+            "arrival_distance_limit":
+                self.arrival_distance_limit,
+
+            "heading_tolerance":
+                self.heading_tolerance
             }
         }

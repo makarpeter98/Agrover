@@ -175,6 +175,28 @@ function updateNavStatus()
                         .textContent =
                             heading.difference + " deg";
                 }
+                
+                /* -----------------------------------------
+                   NAVIGATION SETTINGS
+                   ----------------------------------------- */
+
+                if (data.navigation_settings)
+                {
+                    document
+                        .getElementById(
+                            "nav-arrival-distance-limit"
+                        )
+                        .textContent =
+                            data.navigation_settings.arrival_distance_limit + " m";
+
+
+                    document
+                        .getElementById(
+                            "nav-heading-tolerance"
+                        )
+                        .textContent =
+                            data.navigation_settings.heading_tolerance + " deg";
+                }
 
             }
         )
