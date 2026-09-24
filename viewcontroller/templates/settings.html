@@ -45,6 +45,62 @@
                     </td>
                 </tr>
 
+
+                <tr>
+                    <td>
+                        <div class="setting-name">
+                            Arrival Distance Limit
+                        </div>
+                        <div class="setting-description">
+                            Distance from target point required to consider arrival
+                        </div>
+                    </td>
+
+                    <td class="setting-value">
+
+                        <input
+                            type="number"
+                            id="arrival-distance-limit"
+                            class="setting-number-input"
+                            step="0.1"
+                            min="0"
+                        >
+                        <span class="setting-unit">
+                            m
+                        </span>
+
+                    </td>
+                </tr>
+
+
+                <tr>
+                    <td>
+                        <div class="setting-name">
+                            Heading Tolerance
+                        </div>
+                        <div class="setting-description">
+                            Maximum heading difference before turning
+                        </div>
+                    </td>
+
+                    <td class="setting-value">
+
+                        <input
+                            type="number"
+                            id="heading-tolerance"
+                            class="setting-number-input"
+                            step="1"
+                            min="0"
+                            max="180"
+                        >
+
+                        <span class="setting-unit">
+                            deg
+                        </span>
+
+                    </td>
+                </tr>
+
             </tbody>
 
         </table>

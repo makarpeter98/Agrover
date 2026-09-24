@@ -1522,16 +1522,22 @@ body.light-mode .point-checkbox {
     text-align: right;
 }
 
-.setting-name {
-    font-weight: 600;
+.setting-value {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
 }
 
-.setting-description {
-    margin-top: 4px;
-    font-size: 0.85rem;
-    opacity: 0.65;
+.setting-number-input {
+    width: 70px;
+    box-sizing: border-box;
 }
 
+.setting-unit {
+    width: 30px;
+    text-align: left;
+}
 
 /* Switch */
 

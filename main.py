@@ -63,15 +63,6 @@ class RoverSystem:
             daemon=True
         )
         
-        #Iranytu teszt
-        
-        self.compass_test = CompassTest()
-
-        self.compass_test_thread = threading.Thread(
-            target=self.compass_test.run,
-            daemon=True
-        )
-
         self.drive = DriveModel()
 
         self.command_processor = CommandProcessor(
@@ -88,7 +79,8 @@ class RoverSystem:
             self.gps_handler,
             self.point_service,
             self.drive_command,
-            self.heading
+            self.heading,
+            self.database
         )
 
         self.web_ui_service = WebUIService(

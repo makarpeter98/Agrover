@@ -8,7 +8,7 @@ import time
 
 class Navigation:
 
-    def __init__(self, gps_handler, point_service, drive_command, heading):
+    def __init__(self, gps_handler, point_service, drive_command, heading, database):
         self.gps_handler = gps_handler
         self.point_service = point_service
         self.drive_command = drive_command
@@ -25,6 +25,8 @@ class Navigation:
 
         self.arrival_distance_limit = 1
         self.heading_tolerance = 20
+        
+        self.database = database
 
         self._stop_event = threading.Event()
 
@@ -37,6 +39,18 @@ class Navigation:
         if self._active:
             return
 
+        self.arrival_distance_limit = float(
+            self.database.get_setting(
+                "arrival_distance_limit"
+            )
+        )
+
+        self.heading_tolerance = float(
+            self.database.get_setting(
+                "heading_tolerance"
+            )
+        )
+        
         target = self.point_service.get_next_unvisited_point()
 
         if not target:
@@ -110,7 +124,7 @@ class Navigation:
             print(f"    [target  heading difference] {target_heading_difference:.0f}")
             print(f"    [heading tolerance] {heading_tolerance}")
             print(f"    [distance] {target_distance:.0f}m")
-            print(f"    [distance] {arrival_distance_limit:.0f}m")
+            print(f"    [arrival distance limit] {arrival_distance_limit:.0f}m")
             print(f"    [navigation state] {state}")
 
             self._turning_into_the_direction_of_the_target(target_heading_difference, heading_tolerance)
