@@ -4,147 +4,216 @@
 
 <div class="page-header">
 
-    <div>
-        <h1>Database</h1>
-        <p>Waypoint database management</p>
+
+<div>
+    <h1>Database</h1>
+    <p>Waypoint database management</p>
+</div>
+
+
+</div>
+
+<div class="card database-card">
+
+
+<div class="card-header">
+
+    <span>Waypoint Database</span>
+
+    <div class="database-summary">
+
+        <span id="point-count">
+            0 POINTS
+        </span>
+
+        <span id="selected-count">
+            0 SELECTED
+        </span>
+
     </div>
 
 </div>
 
 
-<div class="card database-card">
+<div class="card-body">
 
-    <div class="card-header">
+    <div class="database-toolbar">
 
-        <span>Waypoint Database</span>
+        <div class="database-actions">
 
-        <div class="database-summary">
+            <button
+                class="button"
+                type="button"
+                onclick="loadDB()">
+                Load from DB
+            </button>
 
-            <span id="point-count">
-                0 POINTS
-            </span>
 
-            <span id="selected-count">
-                0 SELECTED
-            </span>
+            <button
+                class="button"
+                type="button">
+                Add point
+            </button>
+
+
+            <button
+                class="button"
+                type="button"
+                onclick="saveSelected()">
+                Save selected
+            </button>
+
+
+            <button
+                class="button button-danger"
+                type="button"
+                onclick="deleteSelected()">
+                Delete selected
+            </button>
+
+
+            <button
+                class="button"
+                type="button"
+                onclick="selectAll()">
+                Select all
+            </button>
 
         </div>
 
     </div>
 
 
-    <div class="card-body">
+    <!-- Add waypoint -->
 
-        <div class="database-toolbar">
+    <div class="database-add-point">
 
-            <div class="database-actions">
-
-                <button
-                    class="button"
-                    type="button"
-                    onclick="loadDB()">
-                    Load from DB
-                </button>
+        <div class="database-add-point-header">
+            <span>Add waypoint</span>
+            <span class="database-add-point-hint">
+                GPS coordinates
+            </span>
+        </div>
 
 
-                <button
-                    class="button"
-                    type="button"
-                    onclick="saveSelected()">
-                    Save selected
-                </button>
+        <div class="database-add-point-body">
 
+            <div class="database-coordinate">
 
-                <button
-                    class="button button-danger"
-                    type="button"
-                    onclick="deleteSelected()">
-                    Delete selected
-                </button>
+                <label for="point-latitude">
+                    LATITUDE
+                </label>
 
-
-                <button
-                    class="button"
-                    type="button"
-                    onclick="selectAll()">
-                    Select all
-                </button>
+                <input
+                    id="point-latitude"
+                    type="number"
+                    step="0.000001"
+                    placeholder="47.535526">
 
             </div>
 
-        </div>
 
+            <div class="database-coordinate">
 
-        <div class="database-table-wrapper">
+                <label for="point-longitude">
+                    LONGITUDE
+                </label>
 
-            <table id="database-table">
+                <input
+                    id="point-longitude"
+                    type="number"
+                    step="0.000001"
+                    placeholder="21.643239">
 
-                <thead>
+            </div>
 
-                    <tr>
+            <button
+                class="button database-add-point-button"
+                type="button"
+                onclick="loadCurrentGPS()">
+                Get current GPS
+            </button>
 
-                        <th data-column="latitude">
-                            LAT
-                            <span class="sort-indicator"></span>
-                        </th>
-
-
-                        <th data-column="longitude">
-                            LON
-                            <span class="sort-indicator"></span>
-                        </th>
-
-
-                        <th data-column="time">
-                            TIME
-                            <span class="sort-indicator"></span>
-                        </th>
-
-
-                        <th data-column="sequence">
-                            SEQ
-                            <span class="sort-indicator"></span>
-                        </th>
-
-
-                        <th data-column="in_database">
-                            DB
-                            <span class="sort-indicator"></span>
-                        </th>
-
-
-                        <th data-column="visited">
-                            VISITED
-                            <span class="sort-indicator"></span>
-                        </th>
-
-
-                        <th class="select-column">
-                            SELECT
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody id="database-table-body">
-                </tbody>
-
-            </table>
-
+            <button
+                class="button database-add-point-button"
+                type="button"
+                onclick="addWaypoint()">
+                Add waypoint
+            </button>
+            
         </div>
 
     </div>
+
+    <div class="database-table-wrapper">
+
+        <table id="database-table">
+
+            <thead>
+
+                <tr>
+
+                    <th data-column="latitude">
+                        LAT
+                        <span class="sort-indicator"></span>
+                    </th>
+
+
+                    <th data-column="longitude">
+                        LON
+                        <span class="sort-indicator"></span>
+                    </th>
+
+
+                    <th data-column="time">
+                        TIME
+                        <span class="sort-indicator"></span>
+                    </th>
+
+
+                    <th data-column="sequence">
+                        SEQ
+                        <span class="sort-indicator"></span>
+                    </th>
+
+
+                    <th data-column="in_database">
+                        DB
+                        <span class="sort-indicator"></span>
+                    </th>
+
+
+                    <th data-column="visited">
+                        VISITED
+                        <span class="sort-indicator"></span>
+                    </th>
+
+
+                    <th class="select-column">
+                        SELECT
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="database-table-body">
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
 
 </div>
 
 {% endblock %}
-
 
 {% block scripts %}
 
 <script src="{{ url_for('static', filename='js/database.js') }}"></script>
 
 {% endblock %}
-

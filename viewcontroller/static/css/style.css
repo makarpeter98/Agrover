@@ -1580,3 +1580,221 @@ body.light-mode .point-checkbox {
 .switch input:checked + .slider::before {
     transform: translateX(22px);
 }
+
+/* =========================================================
+   ADD WAYPOINT
+   ========================================================= */
+
+.database-add-point {
+    margin-bottom: 18px;
+
+    border: 1px solid #202c36;
+    border-radius: 9px;
+
+    background: #0d141a;
+}
+
+.database-add-point-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 11px 13px;
+
+    border-bottom: 1px solid #1f2b34;
+
+    color: #aebbc4;
+
+    font-size: 10px;
+    font-weight: bold;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.database-add-point-hint {
+    color: #5f6e7b;
+
+    font-size: 9px;
+    font-weight: bold;
+
+    letter-spacing: 0.8px;
+}
+
+.database-add-point-body {
+    display: flex;
+    align-items: flex-end;
+
+    gap: 12px;
+
+    padding: 14px;
+}
+
+.database-coordinate {
+    flex: 1;
+}
+
+.database-coordinate label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #687785;
+
+    font-size: 9px;
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+.database-coordinate input {
+    width: 100%;
+
+    height: 40px;
+
+    padding: 0 11px;
+
+    border: 1px solid #293743;
+    border-radius: 8px;
+
+    background: #101820;
+
+    color: #dce6ec;
+
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 12px;
+
+    outline: none;
+
+    transition:
+        border-color 0.12s ease,
+        background 0.12s ease;
+}
+
+.database-coordinate input::placeholder {
+    color: #4f5e69;
+}
+
+.database-coordinate input:focus {
+    border-color: #3b4d5c;
+    background: #131d25;
+}
+
+.database-add-point-button {
+    height: 40px;
+
+    padding: 0 16px;
+
+    white-space: nowrap;
+}
+
+
+/* ---------------------------------------------------------
+   ADD WAYPOINT - LIGHT MODE
+   --------------------------------------------------------- */
+
+body.light-mode .database-add-point {
+    border-color: #d8e0e6;
+    background: #f7f9fa;
+}
+
+body.light-mode .database-add-point-header {
+    border-bottom-color: #d8e0e6;
+    color: #52616c;
+}
+
+body.light-mode .database-add-point-hint {
+    color: #87949e;
+}
+
+body.light-mode .database-coordinate label {
+    color: #71808b;
+}
+
+body.light-mode .database-coordinate input {
+    border-color: #cbd6dd;
+    background: #ffffff;
+    color: #35444f;
+}
+
+body.light-mode .database-coordinate input::placeholder {
+    color: #9aa7b1;
+}
+
+body.light-mode .database-coordinate input:focus {
+    border-color: #aebcc5;
+    background: #ffffff;
+}
+
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 720px) {
+
+    .database-add-point-body {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 10px;
+    }
+
+    .database-add-point-button {
+        width: 100%;
+
+        grid-column: 1 / -1;
+    }
+
+}
+
+.database-gps-button {
+    height: 40px;
+    padding: 0 14px;
+
+    border: 1px solid #293743;
+    border-radius: 8px;
+
+    background: #101820;
+    color: #8d9ba6;
+
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+
+    white-space: nowrap;
+    cursor: pointer;
+
+    transition:
+        border-color 0.12s ease,
+        background 0.12s ease,
+        color 0.12s ease;
+}
+
+.database-gps-button:hover {
+    border-color: #3b4d5c;
+    background: #131d25;
+    color: #c5d0d7;
+}
+
+.database-gps-button:active {
+    background: #0c1217;
+}
+
+
+/* LIGHT MODE */
+
+body.light-mode .database-gps-button {
+    border-color: #cbd6dd;
+    background: #ffffff;
+    color: #687782;
+}
+
+body.light-mode .database-gps-button:hover {
+    border-color: #aebcc5;
+    background: #f4f7f9;
+    color: #43525d;
+}

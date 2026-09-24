@@ -79,7 +79,7 @@ class Navigation:
             gps_target_position = self._target_point
             current_heading = self.current_heading = self.heading['value']
             
-            target_distance = self._distance_to_targe = nav_math.distance_m(
+            target_distance = self._distance_to_target = nav_math.distance_m(
                 gps_position.latitude,
                 gps_position.longitude,
                 gps_target_position.latitude,
