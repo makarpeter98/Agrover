@@ -6,6 +6,7 @@ import time
 from hardware.rover.rover_model import DriveModel
 
 from navigation.navigation import Navigation
+from navigation.navigation_direct_drive import NavigationDirectDrive
 from navigation.point_service import PointService
 
 from database.database import Database
@@ -75,7 +76,7 @@ class RoverSystem:
             daemon=True
         )
 
-        self.navigation = Navigation(
+        self.navigation = NavigationDirectDrive(
             self.gps_handler,
             self.point_service,
             self.drive_command,
